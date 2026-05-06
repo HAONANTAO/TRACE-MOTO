@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "prerender": "node scripts/prerender.mjs",
     "og": "node scripts/build-og.mjs",
-    "icons": "node scripts/build-icons.mjs"
+    "icons": "node scripts/build-icons.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -21,8 +22,10 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^147.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "puppeteer": "^24.43.0",
+    "puppeteer-core": "^24.43.0",
     "sharp": "^0.34.5",
     "vite": "^5.4.2"
   }

@@ -2470,7 +2470,56 @@ function Footer() {
 
         <div style={{ maxWidth: 920, margin: '40px auto 0' }}>
           <div className="f-serif" style={{ fontSize: 14, color: C.creamMute, fontStyle: 'italic', fontWeight: 300, lineHeight: 1.7 }}>
-            如果你的问题不在上面——欢迎在文末留言，或邮件到 <span style={{ color: C.accent }}>errata@...</span>。每周看一次。
+            如果你的问题不在上面——
+            <a href="https://github.com/HAONANTAO/TRACE-MOTO/issues" target="_blank" rel="noopener noreferrer" style={{ color: C.accent, textDecoration: 'underline' }}>
+              到 GitHub 提个 issue
+            </a>
+            ，或者直接 fork repo 提 PR 修正。每周看一次。
+          </div>
+        </div>
+      </div>
+
+      {/* 关于作者 */}
+      <div className="container" style={{ padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 64px)', borderTop: `1px solid ${C.border}` }}>
+        <div style={{ maxWidth: 920, margin: '0 auto' }}>
+          <div className="f-mono" style={{ fontSize: 10, color: C.accent, letterSpacing: 4, marginBottom: 16 }}>
+            — 关于作者 / ABOUT —
+          </div>
+          <div className="f-display" style={{ fontSize: 'clamp(28px, 3.6vw, 44px)', color: C.cream, lineHeight: 1.05, marginBottom: 24 }}>
+            一个在墨尔本拿牌时<br/>
+            <span style={{ color: C.accent }}>踩过坑的华人骑士</span>
+          </div>
+          <p className="f-serif" style={{ fontSize: 'clamp(15px, 1.5vw, 17px)', color: C.creamMute, fontStyle: 'italic', lineHeight: 1.75, fontWeight: 300, maxWidth: 720 }}>
+            这本指南是我自己拿牌、选车、跑山过程中踩坑后整理出来的笔记。把 6 个月的研究、3 个驾校的实测、5 家保险的报价、4 条山路的实跑写进来——目标是让下一个像我一样的新手不用从零摸索。
+          </p>
+          <p className="f-serif" style={{ fontSize: 'clamp(15px, 1.5vw, 17px)', color: C.creamMute, fontStyle: 'italic', lineHeight: 1.75, fontWeight: 300, maxWidth: 720, marginTop: 16 }}>
+            没广告、没付费墙、没数据收集（除了 Vercel Analytics 看个流量曲线）。每条信息都标了来源，怀疑随时点链接核对。
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 32 }}>
+            <a href="https://github.com/HAONANTAO/TRACE-MOTO" target="_blank" rel="noopener noreferrer" className="f-mono" style={{
+              padding: '12px 20px', background: 'transparent',
+              border: `1px solid ${C.cream}`, color: C.cream, textDecoration: 'none',
+              fontSize: 11, letterSpacing: 2, fontWeight: 700,
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+            }}>
+              ★ STAR ON GITHUB
+            </a>
+            <a href="https://github.com/HAONANTAO/TRACE-MOTO/issues" target="_blank" rel="noopener noreferrer" className="f-mono" style={{
+              padding: '12px 20px', background: 'transparent',
+              border: `1px solid ${C.border}`, color: C.creamMute, textDecoration: 'none',
+              fontSize: 11, letterSpacing: 2, fontWeight: 700,
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+            }}>
+              提 ISSUE / 反馈
+            </a>
+            <a href="https://github.com/HAONANTAO/TRACE-MOTO/pulls" target="_blank" rel="noopener noreferrer" className="f-mono" style={{
+              padding: '12px 20px', background: 'transparent',
+              border: `1px solid ${C.border}`, color: C.creamMute, textDecoration: 'none',
+              fontSize: 11, letterSpacing: 2, fontWeight: 700,
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+            }}>
+              提 PR / 帮我改
+            </a>
           </div>
         </div>
       </div>
@@ -2526,29 +2575,37 @@ function Footer() {
           <div>
             <div className="f-mono" style={{ fontSize: 9, color: C.mute, letterSpacing: 3, marginBottom: 16 }}>RESOURCES</div>
             {[
-              { l: "VicRoads", u: "vicroads.vic.gov.au" },
-              { l: "LAMS 清单", u: "vicroads.vic.gov.au" },
-              { l: "Bikesales", u: "bikesales.com.au" },
-              { l: "勘误 / 反馈", u: "errata@..." },
+              { l: "VicRoads", u: "vicroads.vic.gov.au", href: "https://www.vicroads.vic.gov.au" },
+              { l: "LAMS 清单", u: "vicroads.vic.gov.au", href: "https://www.vicroads.vic.gov.au" },
+              { l: "Bikesales", u: "bikesales.com.au", href: "https://www.bikesales.com.au" },
+              { l: "勘误 / 反馈", u: "GitHub Issues", href: "https://github.com/HAONANTAO/TRACE-MOTO/issues" },
+              { l: "源代码 / Fork", u: "GitHub Repo", href: "https://github.com/HAONANTAO/TRACE-MOTO" },
             ].map((r, i) => (
-              <div key={i} className="f-mono" style={{ fontSize: 11, color: C.creamMute, padding: '6px 0', letterSpacing: 1 }}>
+              <a key={i} href={r.href} target="_blank" rel="noopener noreferrer"
+                 className="f-mono" style={{
+                   display: 'block', fontSize: 11, color: C.creamMute,
+                   padding: '6px 0', letterSpacing: 1, textDecoration: 'none',
+                 }}>
                 {r.l}<br/>
                 <span style={{ color: C.mute, fontSize: 10 }}>{r.u}</span>
-              </div>
+              </a>
             ))}
           </div>
 
           <div>
             <div className="f-mono" style={{ fontSize: 9, color: C.mute, letterSpacing: 3, marginBottom: 16 }}>COMMUNITY</div>
             <div className="f-serif" style={{ fontSize: 13, color: C.creamMute, fontStyle: 'italic', lineHeight: 1.7 }}>
-              想加入路书？<br/>
-              分享你的跑山故事？
+              想加路书？<br/>
+              想分享跑山故事？<br/>
+              想要勘误？
             </div>
-            <button className="f-mono" style={{
-              marginTop: 16, padding: '10px 16px', background: 'transparent',
-              border: `1px solid ${C.cream}`, color: C.cream, cursor: 'pointer',
-              fontSize: 10, letterSpacing: 2, fontWeight: 700,
-            }}>JOIN GROUP →</button>
+            <a href="https://github.com/HAONANTAO/TRACE-MOTO" target="_blank" rel="noopener noreferrer"
+               className="f-mono" style={{
+                 marginTop: 16, padding: '10px 16px', background: 'transparent',
+                 border: `1px solid ${C.cream}`, color: C.cream, cursor: 'pointer',
+                 fontSize: 10, letterSpacing: 2, fontWeight: 700,
+                 textDecoration: 'none', display: 'inline-block',
+               }}>★ STAR ON GITHUB →</a>
           </div>
         </div>
       </div>
