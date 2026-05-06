@@ -3,6 +3,8 @@ import {
   ArrowRight, X, Sparkles, AlertTriangle, ArrowLeft,
   Star, ChevronRight
 } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { C } from "./theme";
 import {
   chapters, fieldNotes, bikes, schools, certifications, gear, drills,
@@ -61,6 +63,8 @@ export default function App() {
         <MountainSection />
         <InsuranceSection />
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </div>
     </>
   );

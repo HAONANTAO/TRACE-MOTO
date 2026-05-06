@@ -161,10 +161,7 @@
     }
     </script>
 
-    <!-- ============== 网站统计（Plausible · 1KB · 不用 cookie banner） ============== -->
-    <!-- 部署后到 https://plausible.io 注册账号 → 把 data-domain 改成你的真实域名即可启用。 -->
-    <!-- 想用 GA4 改成: <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXX"></script>... -->
-    <script defer data-domain="wayfarer-phi.vercel.app" src="https://plausible.io/js/script.js"></script>
+    <!-- 网站统计：Vercel Analytics + Speed Insights 通过 React 组件挂载（见 src/App.jsx） -->
 
     <!-- ============== 字体（preconnect + 异步加载） ============== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
