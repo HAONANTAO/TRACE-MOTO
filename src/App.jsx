@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   ArrowRight, X, Sparkles, AlertTriangle, ArrowLeft,
   Star, ChevronRight
@@ -8,252 +8,13 @@ import {
   chapters, fieldNotes, bikes, schools, certifications, gear, drills,
   yearRoadmap, groupSignals, groupPitfalls, accidentSteps, routes,
   bikeCatalog, recentQs, headShapes, lamsModRules,
+  gearBrandsByRegion, blackSpurData, chapterResources, chapterCompare,
+  taobaoShippingData, shippingChannels,
+  insuranceLayers, insuranceCompanies, newRiderRules, theftSpots, lockKit,
 } from "./data";
 
 
-const fieldNotes = {
-  licence_1: "驾照翻译要 NAATI 认证——VicRoads 不认普通翻译。但香港驾照本身有英文不用翻。",
-  licence_2: "我选的 HART Somerton——周末预约要提前 2 周。",
-  licence_3: "签证状态会影响转换流程，临时签证只能用国际驾照。",
-  ride_1: "二手 LAMS 看车记得带懂行的朋友。Bikesales 报价水分不小。",
-  ride_2: "新车前 6 个月折旧最猛——3 年后买新换车真的亏。",
-  gear_1: "试戴时戴 30 分钟不取下——回家发现压头的盔，下次出门一定后悔。",
-  gear_2: "Shoei 国内只有北京 Fenghuolun + 厦门 Chuangjian 两家正规代理——其他淘宝店都是水货。",
-  gear_3: "KOMINE 新款几乎全是越南/印尼产——号称\"国产代工\"的多半是假货。",
-  practice_1: "Bunnings Burnside 周日早 7-9 点是练车黄金时段——员工还没上班，巡逻车 9 点后才来。",
-  practice_2: "团骑前先看 leader 是谁——超过 2 年新手当 leader 的，宁可不跟。",
-  practice_3: "TAC 索赔越早越好——12 个月时限不是建议，是法律。错过基本零希望。",
-  mountain_1: "周末 11 点后游客和老司机都堵在 Healesville——避开。",
-  mountain_2: "Black Spur 在维州官方记录里是\"摩托事故黑点\"——没有路肩，跑偏不是撞山就是飞下悬崖。",
-  mountain_3: "Netrider 老司机的话：\"湿天 hold 不住 Black Spur？Reefton Spur 就别去——通常更难。\"",
-  mountain_4: "出发前查 VicTraffic 的 fire warning，夏天山区一根烟头能毁一切。",
-  insurance_1: "我的策略：转 Full 牌前买便宜二手 + 第三方财产，转牌后再升综合险。能省 A$2k+。",
-  insurance_2: "保险报价至少比 5 家——同样配置 QBE / NRMA / RACV 报价能差 40%。",
-  insurance_3: "我朋友的 Ninja 400 在 Footscray 街边过夜被偷——保险全赔但补办两个月没车骑。",
-};
 
-const bikes = [
-  { brand: "HONDA", model: "CB300R", price: 6.8, displ: 286, hp: 30, weight: 144, seat: 800, gears: 6, fuel: 27, type: "街车", power: "温和", budget: "<8k", height: ["S", "M", "L"], pick: "新手最轻", beginnerScore: 9.5, commute: 9, mountain: 6, review: "286cc 单缸高速会觉得不够用——但这正是让你不作死的功能。撞了不心疼。", upgradeTo: "CB650R / MT-07" },
-  { brand: "YAMAHA", model: "MT-03", price: 7.5, displ: 321, hp: 41, weight: 168, seat: 780, gears: 6, fuel: 26, type: "街车", power: "适中", budget: "<8k", height: ["S", "M", "L"], pick: "矮个友好", beginnerScore: 9.0, commute: 8, mountain: 7, review: "780mm 座椅是矮个救星。论坛常说 6 档高速段不够长——日常通勤完全够。", upgradeTo: "MT-07 / Ninja 650" },
-  { brand: "CFMOTO", model: "450NK", price: 8.0, displ: 449, hp: 47, weight: 175, seat: 795, gears: 6, fuel: 24, type: "街车", power: "适中", budget: "<8k", height: ["M", "L", "XL"], pick: "性价比", beginnerScore: 8.5, commute: 7, mountain: 8, review: "中国造性价比之王，但服务网点比日厂少。冷启动有时不顺。", upgradeTo: "MT-07 / Trident 660" },
-  { brand: "YAMAHA", model: "YZF-R3", price: 8.0, displ: 321, hp: 41, weight: 169, seat: 780, gears: 6, fuel: 28, type: "仿赛", power: "适中", budget: "<8k", height: ["S", "M", "L"], beginnerScore: 8.0, commute: 5, mountain: 8, review: "运动姿势漂亮但前倾通勤累，1 小时手腕开始酸。新手少买仿赛。", upgradeTo: "R7 / Ninja 650" },
-  { brand: "KAWASAKI", model: "Z400", price: 8.1, displ: 399, hp: 45, weight: 167, seat: 785, gears: 6, fuel: 25, type: "街车", power: "适中", budget: "8-12k", height: ["M", "L"], beginnerScore: 8.5, commute: 8, mountain: 7, review: "Ninja 400 的裸车版，更舒适。澳洲销量没 Ninja 400 高但通勤更对路。", upgradeTo: "Z650 / MT-07" },
-  { brand: "KAWASAKI", model: "Ninja 400", price: 8.6, displ: 399, hp: 45, weight: 168, seat: 785, gears: 6, fuel: 25, type: "仿赛", power: "适中", budget: "8-12k", height: ["M", "L"], pick: "新手仿赛标杆", beginnerScore: 9.0, commute: 6, mountain: 8, review: "澳洲新手仿赛销量第一。轻、快、好控。但 P 牌期满几乎所有人都换大的。", upgradeTo: "Ninja 650 / ZX-6R" },
-  { brand: "KTM", model: "390 Duke", price: 7.8, displ: 373, hp: 44, weight: 149, seat: 820, gears: 6, fuel: 26, type: "街车", power: "激进", budget: "<8k", height: ["L", "XL"], beginnerScore: 7.0, commute: 5, mountain: 9, review: "44 马力配 149kg——powerful 到新手会被吓到。先骑别的再回来。", upgradeTo: "790 Duke / 890 Duke" },
-  { brand: "HONDA", model: "CBR500R", price: 9.5, displ: 471, hp: 47, weight: 192, seat: 785, gears: 6, fuel: 24, type: "仿赛", power: "适中", budget: "8-12k", height: ["M", "L", "XL"], beginnerScore: 7.5, commute: 7, mountain: 7, review: "比 Ninja 400 重，但 471cc 双缸更顺。仿赛姿势没那么前倾，通勤还能接受。", upgradeTo: "CBR650R / Ninja 650" },
-  { brand: "SUZUKI", model: "SV650 LAMS", price: 10.5, displ: 645, hp: 52, weight: 198, seat: 785, gears: 6, fuel: 20, type: "街车", power: "进阶", budget: "8-12k", height: ["M", "L", "XL"], pick: "弯道神器", beginnerScore: 7.0, commute: 7, mountain: 9, review: "解禁版是弯道神器——LAMS 限速版被夹得很闷。买它就是为了 P 牌期满直接解禁。", upgradeTo: "SV650 (解禁) / MT-07" },
-  { brand: "YAMAHA", model: "MT-07 LAMS", price: 11.6, displ: 689, hp: 52, weight: 184, seat: 805, gears: 6, fuel: 22, type: "街车", power: "进阶", budget: "8-12k", height: ["L", "XL"], beginnerScore: 7.0, commute: 7, mountain: 9, review: "解禁后是最经典的中量级双缸。LAMS 期感觉力被锁——满 P 牌后再上才是它的本色。", upgradeTo: "MT-07 解禁版" },
-  { brand: "ROYAL ENFIELD", model: "Conti GT 650", price: 10.8, displ: 648, hp: 47, weight: 198, seat: 793, gears: 6, fuel: 24, type: "复古", power: "适中", budget: "8-12k", height: ["M", "L"], pick: "复古党", beginnerScore: 7.5, commute: 6, mountain: 7, review: "复古党专属，café racer 姿势。慢慢骑才有味，跑山别选它。", upgradeTo: "继续骑就行" },
-];
-
-const schools = [
-  { name: "HART", brand: "Honda", spots: ["Somerton", "St Kilda"], price2day: 579, type: "国际连锁", note: "教练标准化" },
-  { name: "Stay Upright", brand: "—", spots: ["Werribee", "Braeside"], price2day: 599, type: "VIC 主流", note: "全澳最大" },
-  { name: "Armstrongs", brand: "—", spots: ["Thomastown"], price2day: 525, type: "本地老牌", note: "性价比" },
-  { name: "Ridetek", brand: "—", spots: ["Pakenham"], price2day: 499, type: "性价比", note: "东南区最便宜" },
-];
-
-const certifications = [
-  { name: "AS/NZS 1698", region: "澳新", legal: true, note: "澳洲合法上路必须", level: "★★★★" },
-  { name: "ECE 22.06", region: "欧盟", legal: false, note: "国际主流，但澳洲法规要求 AS/NZS", level: "★★★★★" },
-  { name: "DOT", region: "美国", legal: false, note: "美标，澳洲不承认", level: "★★★" },
-  { name: "SNELL M2020", region: "美国", legal: false, note: "赛道级，但澳洲不替代 AS/NZS", level: "★★★★★" },
-  { name: "3C", region: "中国", legal: false, note: "国内强制，澳洲无效", level: "★★" },
-];
-
-const gear = [
-  { cn: "头盔", en: "HELMET", critical: true, note: "唯一不能省的——直接关系命",
-    warning: "澳洲法律要求 AS/NZS 1698 认证，淘宝多数没此标，戴上路违法",
-    local: { entry: "HJC C70 / LS2 FF902 · A$229–349", mid: "Shoei NXR2 / AGV K6S · A$849", high: "Shoei X-15 · A$1399+", where: "MCAS · Peter Stevens" },
-    taobao: { entry: "LS2 国行 · ¥800-1500", mid: "AGV K6S 国行 · ¥3500-5500", warning: "认证可能不带 AS/NZS" } },
-  { cn: "骑行夹克", en: "JACKET", critical: true, note: "必须带 CE 等级护具（肩、肘、背）",
-    local: { entry: "DriRider RX-3 · A$399", mid: "Alpinestars T-GP · A$599", high: "Dainese Avro · A$899", where: "AMX · BikeBiz" },
-    taobao: { entry: "KOMINE 副厂 · ¥400", mid: "SCOYCO 赛羽 · ¥800-1500", high: "瑞德兹 · ¥1500-2500" } },
-  { cn: "骑行手套", en: "GLOVES", critical: true,
-    local: { entry: "Five RFX1 · A$129", mid: "Knox Hand Armour · A$199", high: "Held Phantom · A$229", where: "MCAS · AMX" },
-    taobao: { entry: "KOMINE GK-167 · ¥150", mid: "摩雷士 · ¥300-500", high: "SCOYCO · ¥250-450" } },
-  { cn: "骑行裤", en: "PANTS", note: "Draggin Jeans 是墨尔本本土品牌",
-    local: { entry: "Rev'It Lombard 3 · A$249", mid: "Draggin Jeans · A$299", high: "Dainese Casual · A$599", where: "Draggin · MCAS" },
-    taobao: { entry: "SCOYCO · ¥300-600", mid: "KOMINE 副厂 · ¥600-1000", high: "瑞德兹 · ¥1000-1500" } },
-  { cn: "骑行靴", en: "BOOTS", note: "重点是护踝 + 防滑",
-    local: { entry: "TCX Hero · A$249", mid: "Forma Adventure · A$349", high: "Sidi Rain · A$449", where: "MCAS · Peter Stevens" },
-    taobao: { entry: "SCOYCO · ¥300-500", mid: "摩雷士 · ¥500-800", high: "RIDEZ · ¥800-1200" } },
-];
-
-const drills = [
-  { num: "01", title: "直线起停", en: "Stop & Go", desc: "半离合 + 找平衡。最基础也最重要", time: "30min", level: "★" },
-  { num: "02", title: "8 字绕桩", en: "Figure Eight", desc: "用视线带车，不用方向。看下下个桩，身体自然跟上", time: "45min", level: "★★" },
-  { num: "03", title: "紧急刹车", en: "Emergency Brake", desc: "前 7 后 3，重心后压。模拟从 40km/h 急停", time: "20min", level: "★★" },
-  { num: "04", title: "慢速平衡", en: "Slow Balance", desc: "后刹拖着走，越慢越稳。穿过 10 米窄道用 30 秒", time: "30min", level: "★★★" },
-  { num: "05", title: "压弯入门", en: "Counter Steer", desc: "推内把，身体微倾。在停车场画 8 字，先慢后快", time: "1hr", level: "★★★" },
-];
-
-const yearRoadmap = [
-  {
-    period: "第 1 个月",
-    en: "MONTH 01",
-    title: "肌肉记忆期",
-    italic: "Muscle memory phase.",
-    rules: ["不上高速 / 不夜骑 / 不跑山", "通勤距离 ≤ 20 km", "5 项核心练习每周至少 1 次", "下雨别骑——胎温没建立你刹不住"],
-    focus: "目标不是骑得帅。目标是让换挡 / 刹车 / 转向变成不思考的本能。",
-  },
-  {
-    period: "第 2-3 个月",
-    en: "MONTH 02-03",
-    title: "扩展边界期",
-    italic: "Expanding the envelope.",
-    rules: ["可以高速通勤（M 字头公路 100 km/h）", "可以跑短山路（< 50 km，避开 Black Spur）", "开始 lane filtering（VIC 法定 ≤ 30 km/h 可以）", "第一次雨天通勤——挑白天 + 短距离"],
-    focus: "从「学操作」过渡到「读路况」。开始预判其他车的意图，不要只看自己的前轮。",
-  },
-  {
-    period: "第 4-6 个月",
-    en: "MONTH 04-06",
-    title: "技术升级期",
-    italic: "Skill compounding.",
-    rules: ["第一次 Black Spur——选周日早 8 点前", "学 trail braking（带刹入弯）", "练高速下变道判断", "考虑报 Stay Upright Advanced 课程"],
-    focus: "你应该开始觉得「原来车比我厉害」——这是好事。学会信任车的极限远高于你的胆量。",
-  },
-  {
-    period: "第 7-12 个月",
-    en: "MONTH 07-12",
-    title: "风格成型期",
-    italic: "Finding your line.",
-    rules: ["多日长途（Great Ocean Road / 跨州 trip）", "第一次跟团骑（先选 5-7 人小队）", "持照 ≥ 3 年的 D/E 直接 Full 牌（中国驾照转换者）", "完全新手考虑解禁（VIC 需持 P 牌满 3 年）"],
-    focus: "一年下来，你应该有自己偏爱的路、偏爱的速度、偏爱的骑姿——而不是 YouTube 上看来的样子。",
-  },
-];
-
-const groupSignals = [
-  { hand: "左臂下摆 · 掌心朝下", meaning: "减速", en: "SLOW DOWN" },
-  { hand: "左手食指 + 中指竖起（V 形）", meaning: "改 staggered 队形", en: "STAGGERED" },
-  { hand: "左手食指竖起", meaning: "改 single file（单列）", en: "SINGLE FILE" },
-  { hand: "左手指地（左侧）/ 右脚指地（右侧）", meaning: "路面危险物", en: "ROAD HAZARD" },
-  { hand: "左手指油箱", meaning: "我快没油了", en: "FUEL STOP" },
-  { hand: "拳头举起 + 上下挥动", meaning: "停车 / 休息", en: "PIT STOP" },
-];
-
-const groupPitfalls = [
-  { wrong: "跟得太紧（中国摩托文化习惯）", right: "Staggered 队形里跟前车 2 秒，斜对角 1 秒——安全冗余高过你想象" },
-  { wrong: "弯道里超车 / 改线", right: "进弯前确定位置，弯里只走自己的线。改线 = 撞队友" },
-  { wrong: "不打手势（觉得刹车灯就够了）", right: "前 3 个人都要重复 leader 的手势——确保最后的 sweep 也看到" },
-  { wrong: "加油 / 厕所不等齐", right: "5-7 人是一个团。先到的等齐了再走，没人掉队" },
-  { wrong: "发现走丢了就狂追", right: "靠边停车，等 sweep 来 / 打电话给 leader。骑超你能力的代价是命" },
-];
-
-const accidentSteps = [
-  { num: "01", title: "安全 · SAFETY", desc: "如果还能动，把人和车移到路肩 / 紧急车道。后方 50 米放警示三角架（车上常备）。" },
-  { num: "02", title: "拨 000", desc: "有人受伤 → 救护车。任何人不能动 → 别碰。火 / 油泄漏 → 消防。一个电话同时叫所有服务。" },
-  { num: "03", title: "交换信息", desc: "对方姓名、地址、车牌、保险公司名 + 保单号。VIC 法律：不交换属交通违法。" },
-  { num: "04", title: "拍现场", desc: "车辆位置、刹车痕、路况、对方车牌、对方驾照、伤情。多角度拍——TAC 受理这些是核心证据。" },
-  { num: "05", title: "找证人", desc: "记下证人姓名 + 电话。证人是 TAC 在你和对方说法不一致时唯一能信的来源。" },
-  { num: "06", title: "报警", desc: "VIC 法律强制报警条件：有人受伤 / 对方逃逸 / 财产损失但找不到主人。其他可在线补报：Victoria Police Online。" },
-  { num: "07", title: "看医生", desc: "即使感觉没事也去——whiplash / 内出血可能 24-72 小时后才显现。医院能直接帮你 lodge TAC claim。" },
-];
-
-const routes = [
-  { name: "Black Spur", cn: "黑刺道", from: "Healesville → Marysville", km: 32, fromCBD: 73, time: "1H", level: "进阶", note: "32 公里连续 sweepers，墨尔本必骑", best: "10-3 月", featured: true, type: "经典", vibe: ["弯道", "森林"] },
-  { name: "Reefton Spur", cn: "瑞夫顿", from: "Marysville → Reefton", km: 45, fromCBD: 130, time: "1.5H", level: "高手", note: "Black Spur 进阶版，技术弯多", best: "12-2 月", type: "技术", vibe: ["弯道"] },
-  { name: "Kinglake Loop", cn: "金莱克环", from: "St Andrews 出发", km: 60, fromCBD: 50, time: "2H", level: "入门", note: "新手第一次跑山首选", best: "全年", type: "入门", vibe: ["近郊", "温和"] },
-  { name: "Mt Donna Buang", cn: "唐娜邦山", from: "Warburton 山顶", km: 38, fromCBD: 90, time: "1.5H", level: "进阶", note: "盘山雨林，路面湿滑", best: "11-3 月", type: "盘山", vibe: ["森林", "弯道"] },
-  { name: "Great Ocean Road", cn: "大洋路", from: "Torquay → Apollo Bay", km: 130, fromCBD: 100, time: "半天", level: "进阶", note: "世界级海岸线，注意游客车", best: "10-4 月", type: "风景", vibe: ["海岸", "风景"] },
-  { name: "Great Alpine Road", cn: "阿尔卑斯路", from: "Bright → Omeo", km: 200, fromCBD: 320, time: "2 天", level: "高手", note: "雪山公路，冬季危险", best: "11-4 月", type: "长途", vibe: ["长途", "风景"] },
-];
-
-const bikeCatalog = [
-  // ========== 街车 NAKED (11 台) ==========
-  { brand: "HONDA", model: "CB300F", displ: 286, hp: 30, weight: 144, seat: 800, type: "街车", bestFor: "便宜入门", priceNew: "A$5.8k", priceUsed: "A$3.5–5k" },
-  { brand: "HONDA", model: "CB500F Hornet", displ: 471, hp: 47, weight: 189, seat: 790, type: "街车", bestFor: "通勤·过渡", priceNew: "A$8.5k", priceUsed: "A$5–7k" },
-  { brand: "KAWASAKI", model: "Z500", displ: 451, hp: 45, weight: 169, seat: 785, type: "街车", bestFor: "通勤·新款", priceNew: "A$8.7k", priceUsed: "新款" },
-  { brand: "KAWASAKI", model: "Z650 LAMS", displ: 649, hp: 52, weight: 187, seat: 790, type: "街车", bestFor: "解禁过渡", priceNew: "A$10.5k", priceUsed: "A$7–9k" },
-  { brand: "KAWASAKI", model: "Z650 RS LAMS", displ: 649, hp: 52, weight: 188, seat: 800, type: "街车·复古", bestFor: "颜值党", priceNew: "A$11.4k", priceUsed: "A$8–10k" },
-  { brand: "KTM", model: "250 Duke", displ: 249, hp: 30, weight: 159, seat: 822, type: "街车", bestFor: "新手·激进", priceNew: "A$7.4k", priceUsed: "A$5–6.5k" },
-  { brand: "TRIUMPH", model: "Speed 400", displ: 398, hp: 40, weight: 176, seat: 790, type: "街车", bestFor: "性价比", priceNew: "A$8.3k", priceUsed: "新款" },
-  { brand: "BMW", model: "G310 R", displ: 313, hp: 34, weight: 164, seat: 785, type: "街车", bestFor: "矮个·城市", priceNew: "A$8.2k", priceUsed: "A$5–6.5k" },
-  { brand: "HUSQVARNA", model: "Svartpilen 401", displ: 399, hp: 44, weight: 158, seat: 820, type: "街车·复古", bestFor: "颜值党", priceNew: "A$10.5k", priceUsed: "A$7–8.5k" },
-  { brand: "HUSQVARNA", model: "Vitpilen 401", displ: 399, hp: 44, weight: 158, seat: 820, type: "街车·复古", bestFor: "café racer", priceNew: "A$10.5k", priceUsed: "A$7–8.5k" },
-  { brand: "APRILIA", model: "Tuono 660 LAMS", displ: 659, hp: 47, weight: 183, seat: 820, type: "街车", bestFor: "解禁过渡", priceNew: "A$15k", priceUsed: "A$11–13k" },
-
-  // ========== 仿赛 SPORT (7 台) ==========
-  { brand: "HONDA", model: "CBR300R", displ: 286, hp: 30, weight: 164, seat: 785, type: "仿赛", bestFor: "新手仿赛", priceNew: "A$6.5k", priceUsed: "A$4–5.5k" },
-  { brand: "YAMAHA", model: "YZF-R7 LAMS", displ: 689, hp: 52, weight: 188, seat: 835, type: "仿赛", bestFor: "解禁过渡", priceNew: "A$13.4k", priceUsed: "A$10–12k" },
-  { brand: "KAWASAKI", model: "Ninja 500", displ: 451, hp: 45, weight: 171, seat: 785, type: "仿赛", bestFor: "替代 N400", priceNew: "A$8.9k", priceUsed: "新款" },
-  { brand: "KAWASAKI", model: "Ninja 650 LAMS", displ: 649, hp: 52, weight: 192, seat: 790, type: "仿赛", bestFor: "解禁过渡", priceNew: "A$11.3k", priceUsed: "A$8–10k" },
-  { brand: "KTM", model: "RC 390", displ: 373, hp: 44, weight: 155, seat: 824, type: "仿赛", bestFor: "跑山·激进", priceNew: "A$8.2k", priceUsed: "A$5.5–7k" },
-  { brand: "APRILIA", model: "RS 125", displ: 125, hp: 15, weight: 137, seat: 820, type: "仿赛", bestFor: "L 牌期", priceNew: "A$8.2k", priceUsed: "A$5–6.5k" },
-  { brand: "APRILIA", model: "RS 660 LAMS", displ: 659, hp: 47, weight: 183, seat: 820, type: "仿赛", bestFor: "解禁过渡", priceNew: "A$15.5k", priceUsed: "A$12–14k" },
-
-  // ========== 复古 RETRO (6 台) ==========
-  { brand: "ROYAL ENFIELD", model: "Hunter 350", displ: 349, hp: 20, weight: 181, seat: 790, type: "复古", bestFor: "便宜可爱", priceNew: "A$6.7k", priceUsed: "A$4.5–6k" },
-  { brand: "ROYAL ENFIELD", model: "Meteor 350", displ: 349, hp: 20, weight: 191, seat: 765, type: "复古", bestFor: "矮个友好", priceNew: "A$7.3k", priceUsed: "A$5–6.5k" },
-  { brand: "ROYAL ENFIELD", model: "Interceptor 650", displ: 648, hp: 47, weight: 202, seat: 804, type: "复古", bestFor: "气质流", priceNew: "A$10.4k", priceUsed: "A$7–9k" },
-  { brand: "ROYAL ENFIELD", model: "Bear 650", displ: 648, hp: 47, weight: 216, seat: 830, type: "复古·Scrambler", bestFor: "气质流", priceNew: "A$10.5k", priceUsed: "新款" },
-  { brand: "YAMAHA", model: "XSR700 LAMS", displ: 689, hp: 52, weight: 188, seat: 815, type: "复古", bestFor: "解禁过渡", priceNew: "A$13.5k", priceUsed: "A$9–11k" },
-  { brand: "TRIUMPH", model: "Scrambler 400 X", displ: 398, hp: 40, weight: 179, seat: 835, type: "Scrambler", bestFor: "性价比", priceNew: "A$9.5k", priceUsed: "新款" },
-
-  // ========== 巡航 CRUISER (7 台) ==========
-  { brand: "HONDA", model: "CMX300 Rebel", displ: 286, hp: 27, weight: 169, seat: 690, type: "巡航", bestFor: "矮个最低座", priceNew: "A$7.4k", priceUsed: "A$5–6k" },
-  { brand: "HONDA", model: "Rebel 500", displ: 471, hp: 45, weight: 191, seat: 690, type: "巡航", bestFor: "矮个·哈风格", priceNew: "A$9.6k", priceUsed: "A$6–8k" },
-  { brand: "KAWASAKI", model: "Vulcan S", displ: 649, hp: 52, weight: 235, seat: 705, type: "巡航", bestFor: "解禁过渡", priceNew: "A$10k", priceUsed: "A$7–9k" },
-  { brand: "KAWASAKI", model: "Eliminator 500", displ: 451, hp: 45, weight: 176, seat: 735, type: "巡航", bestFor: "新款·矮", priceNew: "A$8.7k", priceUsed: "新款" },
-  { brand: "ROYAL ENFIELD", model: "Classic 350", displ: 349, hp: 20, weight: 195, seat: 805, type: "巡航·复古", bestFor: "情怀党", priceNew: "A$7.7k", priceUsed: "A$5–6.5k" },
-  { brand: "HARLEY-DAVIDSON", model: "X350", displ: 353, hp: 35, weight: 195, seat: 777, type: "巡航", bestFor: "哈牌入门", priceNew: "A$9.8k", priceUsed: "新款" },
-  { brand: "HARLEY-DAVIDSON", model: "X500", displ: 500, hp: 47, weight: 208, seat: 820, type: "巡航", bestFor: "哈牌入门", priceNew: "A$11.5k", priceUsed: "新款" },
-
-  // ========== Adventure / Dual-Sport (8 台) ==========
-  { brand: "HONDA", model: "CRF300L", displ: 286, hp: 27, weight: 142, seat: 880, type: "双运动", bestFor: "越野·轻量", priceNew: "A$8.4k", priceUsed: "A$6–7.5k" },
-  { brand: "HONDA", model: "CRF300 Rally", displ: 286, hp: 27, weight: 153, seat: 885, type: "Adventure", bestFor: "拉力造型", priceNew: "A$9.4k", priceUsed: "A$6.5–8k" },
-  { brand: "ROYAL ENFIELD", model: "Himalayan 450", displ: 452, hp: 39, weight: 196, seat: 825, type: "Adventure", bestFor: "性价比拉力", priceNew: "A$8.4k", priceUsed: "新款" },
-  { brand: "KTM", model: "390 Adventure", displ: 373, hp: 44, weight: 158, seat: 855, type: "Adventure", bestFor: "技术拉力", priceNew: "A$10k", priceUsed: "A$7–9k" },
-  { brand: "BMW", model: "G310 GS", displ: 313, hp: 34, weight: 169, seat: 835, type: "Adventure", bestFor: "BMW 入门", priceNew: "A$8.5k", priceUsed: "A$5.5–7k" },
-  { brand: "SUZUKI", model: "V-Strom 650 LAMS", displ: 645, hp: 52, weight: 213, seat: 835, type: "Adventure", bestFor: "通勤·长途", priceNew: "A$11k", priceUsed: "A$7–9k" },
-  { brand: "YAMAHA", model: "Ténéré 700 LAMS", displ: 689, hp: 52, weight: 205, seat: 875, type: "Adventure", bestFor: "硬派拉力", priceNew: "A$15.6k", priceUsed: "A$11–13k" },
-  { brand: "CFMOTO", model: "450MT", displ: 449, hp: 41, weight: 175, seat: 820, type: "Adventure", bestFor: "性价比拉力", priceNew: "A$9.5k", priceUsed: "新款" },
-
-  // ========== 踏板 SCOOTER (4 台) ==========
-  { brand: "YAMAHA", model: "NMAX 155", displ: 155, hp: 15, weight: 131, seat: 765, type: "踏板", bestFor: "L 牌·通勤", priceNew: "A$5.3k", priceUsed: "A$3.5–4.5k" },
-  { brand: "YAMAHA", model: "XMAX 300", displ: 292, hp: 28, weight: 179, seat: 795, type: "踏板", bestFor: "高速通勤", priceNew: "A$8.4k", priceUsed: "A$5–7k" },
-  { brand: "HONDA", model: "PCX 160", displ: 156, hp: 16, weight: 132, seat: 764, type: "踏板", bestFor: "省油通勤", priceNew: "A$5.5k", priceUsed: "A$3.5–4.5k" },
-  { brand: "VESPA", model: "GTS 300", displ: 278, hp: 23, weight: 161, seat: 790, type: "踏板", bestFor: "意大利风", priceNew: "A$10.6k", priceUsed: "A$6.5–8.5k" },
-];
-
-const recentQs = [
-  { who: "L. 同学", days: "2 天前", q: "中国驾照 4 年，3 月份能转完吗？", aPreview: "完全可以。NAATI 翻译 1 周 + VicRoads 验证 + 2-Day 课程同时安排，3 月底前能拿 Full 牌..." },
-  { who: "Yuki", days: "5 天前", q: "168cm 选 MT-03 和 Ninja 400 哪个？", aPreview: "MT-03 座椅 780mm 更友好，Ninja 400 座椅 785mm 但前倾姿势会让你脚更难触地..." },
-  { who: "Ben.W", days: "1 周前", q: "Black Spur 现在去合适吗？", aPreview: "5 月已经入秋，桉树叶湿滑路况开始变差。建议改去 Kinglake Loop——海拔低、路况干..." },
-];
-
-const headShapes = [
-  {
-    id: "long", name: "长椭圆", en: "LONG OVAL", pct: "约 10%",
-    desc: "前后明显比左右长——头型像鸡蛋立着",
-    suited: ["Arai Signet-X (经典长椭圆)", "Arai Profile-V", "X-lite / Nolan 部分款"],
-    avoid: ["HJC (顶额头)", "Bell (顶后脑)", "AGV K 系列"],
-  },
-  {
-    id: "inter", name: "中椭圆", en: "INTERMEDIATE OVAL", pct: "约 80% · 最常见",
-    desc: "前后比左右略长——大多数人是这种",
-    suited: ["Shoei NXR2 / X-15 (经典)", "AGV K6S / Pista", "HJC RPHA (偏圆但能戴)", "Scorpion"],
-    avoid: ["Arai Signet (太长)"],
-    primary: true,
-  },
-  {
-    id: "round", name: "圆椭圆", en: "ROUND OVAL", pct: "约 10%",
-    desc: "前后和左右几乎一样长——较罕见",
-    suited: ["Bell", "AGV K 系列 (部分)", "Arai Quantum"],
-    avoid: ["Shoei (会两侧夹)", "Arai Signet"],
-  },
-];
-
-const lamsModRules = [
-  { name: "拆 throttle restrictor / 解禁", legal: false, ins: false, note: "完全违法 + 保险作废，事故全赔" },
-  { name: "改 ECU / Tune / 排气", legal: false, ins: false, note: "动力上升即 LAMS 失效" },
-  { name: "高流量进气 / Air filter", legal: false, ins: false, note: "动力可能上升，技术上违规" },
-  { name: "Lowering link / 降低座椅", legal: false, ins: true, note: "矮个常见改装，原则违规但少被查，必须上报保险" },
-  { name: "Frame slider / 车架保护", legal: false, ins: true, note: "原则违规但极少被查，多数保险接受" },
-  { name: "Tail tidy / 短尾灯", legal: false, ins: true, note: "原则违规但极少被查" },
-  { name: "Bar end mirror / 后视镜", legal: true, ins: true, note: "视野改善反而更安全" },
-  { name: "Vinyl wrap / 贴纸 / 喷漆", legal: true, ins: true, note: "外观改装，没问题" },
-];
 
 /* ============ 主应用 ============ */
 
@@ -288,7 +49,9 @@ export default function App() {
         background: C.bg, color: C.cream, minHeight: '100vh',
         position: 'relative', overflow: 'hidden',
       }}>
+        <TopProgress />
         <Nav active={activeChapter} />
+        <SideRail active={activeChapter} />
         <Hero />
         <DecisionFunnel />
         <LicenceSection />
@@ -309,31 +72,100 @@ function Nav({ active }) {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      padding: '16px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      background: `${C.bg}E6`, backdropFilter: 'blur(20px)',
-      borderBottom: `1px solid ${C.border}`,
+      padding: '14px clamp(16px, 4vw, 32px)',
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      background: `${C.bg}F2`, backdropFilter: 'blur(24px)',
+      WebkitBackdropFilter: 'blur(24px)',
+      borderBottom: `1px solid ${C.borderStrong}`,
     }}>
       <a href="#top" style={{ display: 'flex', alignItems: 'baseline', gap: 8, textDecoration: 'none' }}>
-        <span className="f-display" style={{ fontSize: 22, color: C.cream }}>骑迹行者</span>
+        <span className="f-display" style={{ fontSize: 24, color: C.cream, letterSpacing: '0.02em' }}>骑迹行者</span>
         <span className="f-serif hide-mobile" style={{ fontSize: 12, fontStyle: 'italic', color: C.accent, fontWeight: 400 }}>wayfarer</span>
       </a>
 
-      <div className="hide-mobile nav-spacer" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-        {chapters.map(ch => (
-          <a key={ch.id} href={`#${ch.id}`} className="f-mono nav-link" style={{
-            fontSize: 10, letterSpacing: 2, textDecoration: 'none',
-            color: active === ch.id ? C.accent : C.creamMute, transition: 'color 0.2s',
-          }}>
-            {ch.num} / {ch.cn.toUpperCase()}
-          </a>
-        ))}
+      <div className="hide-mobile nav-spacer" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        {chapters.map(ch => {
+          const on = active === ch.id;
+          return (
+            <a key={ch.id} href={`#${ch.id}`} className="f-mono nav-link" style={{
+              fontSize: 11, letterSpacing: 2, textDecoration: 'none',
+              color: on ? C.accent : C.cream,
+              fontWeight: on ? 700 : 500,
+              opacity: on ? 1 : 0.7,
+              padding: '4px 0',
+              borderBottom: on ? `2px solid ${C.accent}` : '2px solid transparent',
+              transition: 'all 0.2s',
+            }}>
+              {ch.num} {ch.cn}
+            </a>
+          );
+        })}
       </div>
 
       <div className="hide-mobile f-mono" style={{ fontSize: 10, color: C.mute, letterSpacing: 2 }}>
-        UPDATED · 2026.04.20
+        2026.04
       </div>
-      <div className="show-mobile f-mono" style={{ fontSize: 9, color: C.mute, letterSpacing: 2 }}>VOL.001</div>
+      <div className="show-mobile f-mono" style={{ fontSize: 9, color: C.creamMute, letterSpacing: 2 }}>
+        {active ? chapters.find(c => c.id === active)?.num + ' ' + chapters.find(c => c.id === active)?.cn : 'VOL.001'}
+      </div>
     </nav>
+  );
+}
+
+/* ============ Side Rail (右侧悬浮章节导航) + 顶部进度条 ============ */
+
+function TopProgress() {
+  const [pct, setPct] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      setPct(total > 0 ? Math.min(100, (h.scrollTop / total) * 100) : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return <div className="top-progress"><i style={{ width: `${pct}%` }} /></div>;
+}
+
+function SideRail({ active }) {
+  const [showTop, setShowTop] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const goTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  return (
+    <>
+      {/* 桌面 / 平板：右侧纵向章节列表 */}
+      <aside className="side-rail" aria-label="章节导航">
+        {showTop && (
+          <button className="rail-btn" onClick={goTop} title="回到顶部" aria-label="回到顶部">↑</button>
+        )}
+        <ul className="rail-list">
+          {chapters.map(c => (
+            <li key={c.id}>
+              <a href={`#${c.id}`} className={`rail-dot ${active === c.id ? 'on' : ''}`}>
+                <span className="rail-num">{c.num}</span>
+                <span className="rail-cn">{c.cn}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      {/* 移动端：仅一颗回顶部按钮（固定在右下） */}
+      {showTop && (
+        <div className="show-mobile-rail">
+          <button className="rail-btn" onClick={goTop} aria-label="回到顶部">↑</button>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -659,8 +491,8 @@ function ChapterCover({ num, cn, en, type }) {
           CHAPTER {num} · {en}
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, flexWrap: 'wrap' }}>
-          <div className="f-display" style={{ fontSize: 'clamp(60px, 11vw, 160px)', color: C.cream, lineHeight: 0.85, letterSpacing: '-0.02em' }}>{cn}</div>
-          <div className="f-display" style={{ fontSize: 'clamp(40px, 7vw, 96px)', color: C.muteDeep, lineHeight: 0.85, letterSpacing: '-0.02em' }}>{num}</div>
+          <h2 className="f-display" style={{ fontSize: 'clamp(60px, 11vw, 160px)', color: C.cream, lineHeight: 0.85, letterSpacing: '-0.02em', margin: 0, fontWeight: 400 }}>{cn}</h2>
+          <span className="f-display" style={{ fontSize: 'clamp(40px, 7vw, 96px)', color: C.muteDeep, lineHeight: 0.85, letterSpacing: '-0.02em' }}>{num}</span>
         </div>
       </div>
     </div>
@@ -743,15 +575,16 @@ function ChapterIntro({ num, cn, en, italic, lead, type, customCover }) {
 
 function SectionLabel({ children, num, source }) {
   return (
-    <div className="container" style={{
+    <h3 className="container" style={{
       padding: '60px clamp(20px, 4vw, 64px) 24px',
       display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap',
+      margin: 0, fontSize: 'inherit', fontWeight: 'inherit',
     }}>
       {num && <span className="f-mono" style={{ fontSize: 11, color: C.accent, letterSpacing: 2 }}>§ {num}</span>}
       <span className="f-mono" style={{ fontSize: 11, color: C.creamMute, letterSpacing: 3, textTransform: 'uppercase' }}>{children}</span>
-      <div style={{ flex: 1, height: 1, background: C.border, minWidth: 24 }} />
+      <span style={{ flex: 1, height: 1, background: C.border, minWidth: 24, alignSelf: 'center' }} />
       {source && <span className="f-mono" style={{ fontSize: 9, color: C.mute, letterSpacing: 1 }}>SOURCE · {source}</span>}
-    </div>
+    </h3>
   );
 }
 
@@ -776,13 +609,101 @@ function FieldNote({ children, rotation = -2 }) {
 
 /* ============ ChapterOutro · 新增 ============ */
 
-function ChapterOutro({ summary, next, isLast }) {
+function ShareBar({ chapter, title }) {
+  const [feedback, setFeedback] = useState("");
+
+  const buildUrl = () => {
+    if (typeof window !== "undefined") {
+      const base = `${window.location.origin}${window.location.pathname}`.replace(/\/$/, "");
+      return `${base}/#${chapter}`;
+    }
+    return `https://wayfarer.cc/#${chapter}`;
+  };
+
+  const shareText = `${title || "骑迹行者"} · 墨尔本华人摩托新手指南`;
+
+  const flash = (msg) => {
+    setFeedback(msg);
+    clearTimeout(flash._t);
+    flash._t = setTimeout(() => setFeedback(""), 2200);
+  };
+
+  const copy = async (extra) => {
+    try {
+      await navigator.clipboard.writeText(buildUrl());
+      flash(extra || "✓ 链接已复制");
+    } catch {
+      flash("复制失败 · 请手动复制地址栏");
+    }
+  };
+
+  const tweet = () => {
+    const u = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(buildUrl())}`;
+    if (typeof window !== "undefined") window.open(u, "_blank", "noopener,noreferrer");
+  };
+
+  const weibo = () => {
+    const u = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(buildUrl())}&title=${encodeURIComponent(shareText)}`;
+    if (typeof window !== "undefined") window.open(u, "_blank", "noopener,noreferrer");
+  };
+
+  const btn = {
+    padding: '8px 14px',
+    fontSize: 11,
+    letterSpacing: 1.5,
+    fontWeight: 700,
+    background: 'transparent',
+    color: C.creamMute,
+    border: `1px solid ${C.border}`,
+    cursor: 'pointer',
+    transition: 'all 0.15s',
+    fontFamily: "'JetBrains Mono', monospace",
+  };
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+      justifyContent: 'center', marginBottom: 48, maxWidth: 720, marginLeft: 'auto', marginRight: 'auto',
+    }}>
+      <span className="f-mono" style={{ fontSize: 10, color: C.mute, letterSpacing: 2, marginRight: 4 }}>分享这一章</span>
+      <button style={btn} onClick={() => copy()}
+        onMouseEnter={e => { e.currentTarget.style.color = C.cream; e.currentTarget.style.borderColor = C.cream; }}
+        onMouseLeave={e => { e.currentTarget.style.color = C.creamMute; e.currentTarget.style.borderColor = C.border; }}
+      >📋 复制链接</button>
+      <button style={btn} onClick={() => copy("✓ 已复制 · 打开微信粘贴发送")}
+        onMouseEnter={e => { e.currentTarget.style.color = C.cream; e.currentTarget.style.borderColor = C.cream; }}
+        onMouseLeave={e => { e.currentTarget.style.color = C.creamMute; e.currentTarget.style.borderColor = C.border; }}
+      >微信</button>
+      <button style={btn} onClick={() => copy("✓ 已复制 · 粘贴到小红书笔记")}
+        onMouseEnter={e => { e.currentTarget.style.color = C.cream; e.currentTarget.style.borderColor = C.cream; }}
+        onMouseLeave={e => { e.currentTarget.style.color = C.creamMute; e.currentTarget.style.borderColor = C.border; }}
+      >小红书</button>
+      <button style={btn} onClick={weibo}
+        onMouseEnter={e => { e.currentTarget.style.color = C.cream; e.currentTarget.style.borderColor = C.cream; }}
+        onMouseLeave={e => { e.currentTarget.style.color = C.creamMute; e.currentTarget.style.borderColor = C.border; }}
+      >微博</button>
+      <button style={btn} onClick={tweet}
+        onMouseEnter={e => { e.currentTarget.style.color = C.cream; e.currentTarget.style.borderColor = C.cream; }}
+        onMouseLeave={e => { e.currentTarget.style.color = C.creamMute; e.currentTarget.style.borderColor = C.border; }}
+      >𝕏</button>
+      {feedback && (
+        <span className="f-mono" style={{
+          fontSize: 11, color: C.accent, letterSpacing: 1, marginLeft: 4,
+          animation: 'fade-up 0.3s both',
+        }}>{feedback}</span>
+      )}
+    </div>
+  );
+}
+
+function ChapterOutro({ summary, next, isLast, chapterId, chapterTitle }) {
   return (
     <div style={{ padding: '80px 0 120px', borderTop: `1px solid ${C.border}`, background: C.surface, position: 'relative' }}>
       <div className="container">
-        <div className="f-mono" style={{ fontSize: 10, color: C.accent, letterSpacing: 4, textAlign: 'center', marginBottom: 48 }}>
+        <div className="f-mono" style={{ fontSize: 10, color: C.accent, letterSpacing: 4, textAlign: 'center', marginBottom: 32 }}>
           — 这一章读完了 —
         </div>
+        {chapterId && <ShareBar chapter={chapterId} title={chapterTitle} />}
         <div className="outro-grid" style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div>
             <div className="f-mono" style={{ fontSize: 10, color: C.mute, letterSpacing: 3, marginBottom: 16 }}>· WHAT YOU LEARNED ·</div>
@@ -909,6 +830,8 @@ function LicenceSection() {
       </div>
 
       <ChapterOutro
+        chapterId="licence"
+        chapterTitle="01 拿牌 · LICENCE"
         summary={[
           "VIC 拿摩托牌有两条路径：完全新手 vs 海外驾照转换",
           "中国驾照可以走转换路径，跳过 3 个月 L 牌等待期",
@@ -1272,7 +1195,12 @@ function RideSection() {
         <FieldNote>{fieldNotes.ride_1}</FieldNote>
       </div>
 
-      <SectionLabel num="2.2">筛选 · FILTER</SectionLabel>
+      <SectionLabel num="2.2">三车并排对比 · COMPARE</SectionLabel>
+      <div className="container" style={{ padding: '0 clamp(20px, 4vw, 64px) 60px' }}>
+        <BikeCompare />
+      </div>
+
+      <SectionLabel num="2.3">筛选 · FILTER</SectionLabel>
       <div className="container" style={{ padding: '0 clamp(20px, 4vw, 64px) 32px', display: 'flex', gap: 32, flexWrap: 'wrap' }}>
         <FilterGroup label="预算" value={budget} setValue={setBudget} options={[
           { v: "any", l: "All" }, { v: "<8k", l: "<$8K" }, { v: "8-12k", l: "$8-12K" },
@@ -1285,7 +1213,7 @@ function RideSection() {
         ]} />
       </div>
 
-      <SectionLabel num="2.3" source="编辑实测 + Bikesales 2026.04">完整对比表 · FULL TABLE</SectionLabel>
+      <SectionLabel num="2.4" source="编辑实测 + Bikesales 2026.04">完整对比表 · FULL TABLE</SectionLabel>
 
       <div className="container table-scroll" style={{ padding: '0 clamp(20px, 4vw, 64px) 24px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 1100 }}>
@@ -1332,22 +1260,22 @@ function RideSection() {
         <FieldNote rotation={1.5}>{fieldNotes.ride_2}</FieldNote>
       </div>
 
-      <SectionLabel num="2.4">编辑精选 · EDITOR'S PICKS</SectionLabel>
+      <SectionLabel num="2.5">编辑精选 · EDITOR'S PICKS</SectionLabel>
       <div className="container grid-3" style={{ padding: '0 clamp(20px, 4vw, 64px) 60px' }}>
         {bikes.filter(b => b.pick).slice(0, 3).map((b, i) => <BikePosterCard key={i} bike={b} />)}
       </div>
 
-      <SectionLabel num="2.5" source="Whirlpool · Netrider · Procycles 实测">老司机的话 · STREET WISDOM</SectionLabel>
+      <SectionLabel num="2.6" source="Whirlpool · Netrider · Procycles 实测">老司机的话 · STREET WISDOM</SectionLabel>
       <div className="container" style={{ padding: '0 clamp(20px, 4vw, 64px) 60px' }}>
         <BikeReviewCards />
       </div>
 
-      <SectionLabel num="2.6" source="VicRoads · LAMS 规则 + Netrider">改装与 LAMS · 黄金法则</SectionLabel>
+      <SectionLabel num="2.7" source="VicRoads · LAMS 规则 + Netrider">改装与 LAMS · 黄金法则</SectionLabel>
       <div className="container" style={{ padding: '0 clamp(20px, 4vw, 64px) 60px' }}>
         <ModWarning />
       </div>
 
-      <SectionLabel num="2.7" source="Bikesales 2026.04 · 各品牌经销商 · 估算">完整目录 · COMPLETE CATALOG</SectionLabel>
+      <SectionLabel num="2.8" source="Bikesales 2026.04 · 各品牌经销商 · 估算">完整目录 · COMPLETE CATALOG</SectionLabel>
       <div className="container" style={{ padding: '0 clamp(20px, 4vw, 64px) 60px' }}>
         <BikeCatalog />
       </div>
@@ -1357,6 +1285,8 @@ function RideSection() {
       </div>
 
       <ChapterOutro
+        chapterId="ride"
+        chapterTitle="02 选车 · RIDE"
         summary={[
           "LAMS 限制：≤660cc 且功率/重量 <150kW/吨",
           "11 台主流 LAMS 完整对比，新手分 9.5 是 CB300R",
@@ -1533,6 +1463,121 @@ function BeginnerBar({ score }) {
   );
 }
 
+function BikeCompare() {
+  // 默认挑 3 台最有代表性的（新手分前三 / 不同类型）
+  const defaultIdx = [
+    bikes.findIndex(b => b.model === "CB300R"),
+    bikes.findIndex(b => b.model === "MT-03"),
+    bikes.findIndex(b => b.model === "Ninja 400"),
+  ].map(i => i < 0 ? 0 : i);
+
+  const [picks, setPicks] = useState(defaultIdx);
+
+  // 维度定义：哪些越大越好 / 哪些越小越好
+  const fields = [
+    { key: 'brand', label: '品牌', fmt: v => v },
+    { key: 'price', label: '价格', fmt: v => `A$${v}K`, prefer: 'low', accent: true },
+    { key: 'displ', label: '排量', fmt: v => `${v} cc` },
+    { key: 'hp', label: '马力', fmt: v => `${v} HP`, prefer: 'high' },
+    { key: 'weight', label: '整车重量', fmt: v => `${v} kg`, prefer: 'low' },
+    { key: 'seat', label: '座椅高度', fmt: v => `${v} mm`, prefer: 'low' },
+    { key: 'fuel', label: '油耗', fmt: v => `${v} km/L`, prefer: 'high' },
+    { key: 'gears', label: '档位', fmt: v => `${v} 档` },
+    { key: 'type', label: '类型', fmt: v => v },
+    { key: 'power', label: '动力风格', fmt: v => v },
+    { key: 'beginnerScore', label: '新手分', fmt: v => `${v} / 10`, prefer: 'high' },
+    { key: 'commute', label: '通勤适合', fmt: v => `${v} / 10`, prefer: 'high' },
+    { key: 'mountain', label: '跑山适合', fmt: v => `${v} / 10`, prefer: 'high' },
+    { key: 'height', label: '适合身高', fmt: v => Array.isArray(v) ? v.join(' / ') : v },
+    { key: 'review', label: '编辑评注', fmt: v => v, italic: true },
+    { key: 'upgradeTo', label: '升级方向', fmt: v => v },
+  ];
+
+  const setPick = (slot, val) => setPicks(p => p.map((x, i) => i === slot ? Number(val) : x));
+  const selected = picks.map(i => bikes[i]);
+  const cols = selected.length;
+
+  // 计算每行 best
+  const bestIdx = (f) => {
+    if (!f.prefer) return -1;
+    const vals = selected.map(b => b[f.key]);
+    if (f.prefer === 'high') return vals.indexOf(Math.max(...vals));
+    if (f.prefer === 'low') return vals.indexOf(Math.min(...vals));
+    return -1;
+  };
+
+  return (
+    <div style={{ border: `1px solid ${C.borderStrong}`, background: C.surface }}>
+      {/* 标题区 */}
+      <div style={{ padding: 'clamp(20px, 3vw, 28px)', borderBottom: `1px solid ${C.border}` }}>
+        <div className="f-mono" style={{ fontSize: 10, color: C.accent, letterSpacing: 3, fontWeight: 700, marginBottom: 8 }}>
+          · SIDE BY SIDE · 三车对比 ·
+        </div>
+        <div className="f-display" style={{ fontSize: 'clamp(22px, 2.4vw, 28px)', color: C.cream, lineHeight: 1.2 }}>
+          挑 3 台并排看
+        </div>
+        <div className="f-serif" style={{ fontSize: 13, color: C.creamMute, fontStyle: 'italic', lineHeight: 1.6, marginTop: 8 }}>
+          高亮的格子是该项里更优的（价格低、马力高、座椅低、新手分高 等）。
+        </div>
+      </div>
+
+      {/* 选择器 */}
+      <div className="cmp-pick" style={{ '--cmp-cols': cols }}>
+        <div className="cmp-label f-mono" style={{ color: C.cream, fontSize: 10, letterSpacing: 2, fontWeight: 700 }}>
+          选车
+        </div>
+        {selected.map((b, slot) => (
+          <select key={slot} value={picks[slot]} onChange={e => setPick(slot, e.target.value)}>
+            {bikes.map((bb, i) => (
+              <option key={i} value={i}>{bb.brand} {bb.model}</option>
+            ))}
+          </select>
+        ))}
+      </div>
+
+      {/* 参数表 */}
+      <div className="compare-grid" style={{ '--cmp-cols': cols }}>
+        {fields.map(f => {
+          const winner = bestIdx(f);
+          return (
+            <React.Fragment key={f.key}>
+              <div className="cmp-label">{f.label}</div>
+              {selected.map((b, i) => (
+                <div
+                  key={i}
+                  className={`cmp-cell ${winner === i ? 'best' : ''}`}
+                  style={{
+                    color: f.accent ? C.accent : C.cream,
+                    fontFamily: f.italic ? "'Fraunces', serif" : "'JetBrains Mono', monospace",
+                    fontStyle: f.italic ? 'italic' : 'normal',
+                    fontSize: f.italic ? 13 : 13,
+                    lineHeight: f.italic ? 1.55 : 1.4,
+                    fontWeight: f.italic ? 300 : (winner === i ? 700 : 400),
+                  }}
+                >
+                  {f.fmt(b[f.key]) ?? '—'}
+                </div>
+              ))}
+            </React.Fragment>
+          );
+        })}
+      </div>
+
+      {/* 重置 */}
+      <div style={{ padding: '14px 20px', borderTop: `1px solid ${C.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+        <span className="f-serif" style={{ fontSize: 12, color: C.mute, fontStyle: 'italic' }}>
+          数据来源：编辑实测 + Bikesales 2026.04
+        </span>
+        <button onClick={() => setPicks(defaultIdx)} className="f-mono" style={{
+          padding: '6px 12px', fontSize: 10, letterSpacing: 2, fontWeight: 700,
+          background: 'transparent', border: `1px solid ${C.border}`, color: C.creamMute,
+          cursor: 'pointer',
+        }}>↻ 重置</button>
+      </div>
+    </div>
+  );
+}
+
 function BikePosterCard({ bike }) {
   return (
     <div style={{
@@ -1652,6 +1697,8 @@ function GearSection() {
       </div>
 
       <ChapterOutro
+        chapterId="gear"
+        chapterTitle="03 装备 · GEAR"
         summary={[
           "头盔必须有 AS/NZS 1698 认证才能合法上路",
           "买头盔前先识别自己头型——80% 是 intermediate oval",
@@ -2061,6 +2108,8 @@ function PracticeSection() {
       </div>
 
       <ChapterOutro
+        chapterId="practice"
+        chapterTitle="04 修行 · PRACTICE"
         summary={[
           "5 项核心练习：直线起停、8 字绕桩、紧急刹车、慢速平衡、压弯入门",
           "Bunnings 周日早晨停车场是最佳练习场",
@@ -2249,6 +2298,8 @@ function MountainSection() {
       </div>
 
       <ChapterOutro
+        chapterId="mountain"
+        chapterTitle="05 入山 · MOUNTAIN"
         summary={[
           "Black Spur 是墨尔本必骑——32 公里连续弯",
           "新手第一次跑山推荐 Kinglake Loop",
@@ -2513,84 +2564,6 @@ function Footer() {
 
 /* ============ V6 新增组件 ============ */
 
-const gearBrandsByRegion = {
-  helmet: {
-    cn: "头盔", en: "HELMET",
-    insight: "唯一不能在淘宝省的——澳洲法律强制 AS/NZS 1698 认证。第一顶必须本地买。",
-    regions: [
-      { region: "本地买（合法）", en: "LOCAL · AU LEGAL", priority: true,
-        brands: [
-          { name: "Shoei NXR2 / X-15", price: "A$849–1399", origin: "日本本厂", note: "中椭圆头型，业界标杆" },
-          { name: "AGV K6S / Pista", price: "A$849–1899", origin: "意大利", note: "中椭圆，轻、运动感强" },
-          { name: "Arai Signet-X", price: "A$1199–1599", origin: "日本", note: "长椭圆专属——国内罕见" },
-          { name: "HJC RPHA 11", price: "A$549–849", origin: "韩国", note: "偏圆，性价比之选" },
-          { name: "LS2 FF902", price: "A$229–349", origin: "西班牙", note: "入门首选" },
-        ] },
-      { region: "日本海淘（性价比）", en: "JAPAN IMPORT",
-        brands: [
-          { name: "Shoei (日亚)", price: "比国内便宜 20–50%", origin: "日本本厂", note: "日本头型偏小，XL 买 XXL" },
-          { name: "Arai (日亚)", price: "比国内便宜 30%", origin: "日本本厂", note: "海关可能抽查 + AS/NZS 缺失" },
-          { name: "OGK Kabuto", price: "¥1500–3500", origin: "旗舰日产 / 半盔青岛产", note: "性价比日系" },
-        ] },
-      { region: "淘宝（多数不合法）", en: "TAOBAO · ⚠ NOT AU LEGAL", warning: true,
-        brands: [
-          { name: "LS2 国行", price: "¥800–1500", origin: "西班牙国内代理", note: "可能不带 AS/NZS" },
-          { name: "AGV K6S 国行", price: "¥3500–5500", origin: "国内代理", note: "认证需逐个核实" },
-          { name: "Shoei (海淘水货)", price: "¥3000–8000", origin: "正规代理仅 2 家", note: "其他淘宝店多为水货——很多假货" },
-          { name: "国产白牌", price: "¥150–500", origin: "义乌/惠州", note: "假认证横行——别买" },
-        ] },
-    ],
-  },
-  jacket: {
-    cn: "骑行夹克", en: "JACKET",
-    insight: "国产 ¥500-1500 性价比最猛；欧版剪裁宽肩，亚洲身形偏大；日系最贴合东方身形。",
-    regions: [
-      { region: "国际大牌（本地零售）", en: "INTERNATIONAL · LOCAL",
-        brands: [
-          { name: "Alpinestars T-GP", price: "A$599–899", origin: "意大利 1963", note: "MotoGP 御用 · A 星" },
-          { name: "Dainese Avro", price: "A$899–1599", origin: "意大利", note: "首创背心防护，欧版宽肩" },
-          { name: "Rev'It Sand 4", price: "A$799–1199", origin: "荷兰", note: "拉力风格，复古党之选" },
-          { name: "DriRider RX-3", price: "A$399", origin: "澳洲本土", note: "本土实用主义" },
-        ] },
-      { region: "日系（贴合东方身形）", en: "JAPANESE",
-        brands: [
-          { name: "KOMINE 真品", price: "¥800–2500", origin: "日产/越南/印尼", note: "新款多东南亚产，老日产更稀有" },
-          { name: "RS Taichi", price: "¥1500–4000", origin: "日本", note: "海淘比国内便宜 20-30%" },
-        ] },
-      { region: "国产性价比", en: "DOMESTIC · CHINA", priority: true,
-        brands: [
-          { name: "赛羽 SCOYCO", price: "¥800–1500", origin: "佛山 1998 · 国内最大厂", note: "JK48 经典款，国内最大装备生产商" },
-          { name: "MOTOBOY", price: "¥600–1200", origin: "国产", note: "拉力服 + 四季款，进藏常见" },
-          { name: "杜汉 DUHAN", price: "¥800–2000", origin: "深圳 1999", note: "机车皮衣强项，OEM 出口" },
-          { name: "雷翅", price: "¥1000–2000", origin: "山东 2016", note: "拉力服专精" },
-          { name: "NERVE 涅夫", price: "¥1500–3500", origin: "唐山+巴基斯坦", note: "号称德国其实国产" },
-        ] },
-    ],
-  },
-  gloves: {
-    cn: "手套 / 护具", en: "GLOVES & ARMOR",
-    insight: "护具是国产的强项——赛羽手套累计销量 900 万双，护具 500 万双。CE 认证普及。",
-    regions: [
-      { region: "国际大牌（本地）", en: "LOCAL",
-        brands: [
-          { name: "Five RFX1 / Knox", price: "A$129–229", origin: "法国 / 英国", note: "本地最常见入门" },
-          { name: "Held Phantom", price: "A$229+", origin: "德国", note: "顶级手套之选" },
-          { name: "Alpinestars GP Plus", price: "A$229+", origin: "意大利", note: "竞速手套" },
-        ] },
-      { region: "日系", en: "JAPANESE",
-        brands: [
-          { name: "KOMINE GK 系列", price: "¥150–500", origin: "日本品牌·东南亚产", note: "经典通勤手套" },
-          { name: "RS Taichi", price: "¥400–1500", origin: "日本", note: "运动 + 通勤皆可" },
-        ] },
-      { region: "国产（强项）", en: "DOMESTIC", priority: true,
-        brands: [
-          { name: "赛羽 SCOYCO", price: "¥150–500", origin: "佛山", note: "手套护具是赛羽强项" },
-          { name: "摩雷士", price: "¥300–500", origin: "国产", note: "中端手套口碑稳" },
-          { name: "瑞德兹", price: "¥250–800", origin: "国产", note: "护具 + 手套" },
-        ] },
-    ],
-  },
-};
 
 function BrandsByRegion() {
   const [item, setItem] = useState("helmet");
@@ -2805,62 +2778,6 @@ function HeadShapeGuide() {
 
 /* ============ V6 入山章新增：BLACK SPUR 完整路书 ============ */
 
-const blackSpurData = {
-  // 来自 motorcyclerides.com.au + Netrider + Shannons Club + 多篇骑手博客的综合数据
-  basics: {
-    coreLength: "11 km core (核心 hairpin 段)",
-    fullRoute: "32 km Healesville → Marysville",
-    cornerRatio: "80% 弯道",
-    direction: "推荐 East → West（上坡更安全，刹车好控）",
-    surface: "近年重铺沥青，bitumen grip 优良",
-    distanceFromCBD: "Healesville 起点距墨尔本 CBD 约 60 km",
-  },
-  warnings: [
-    { icon: "❗", title: "没有路肩", note: "跑偏不是撞山就是飞下悬崖——这是为什么它被列为维州摩托事故黑点。", source: "Noobiker / Spokes" },
-    { icon: "❗", title: "Hairpin 连续", note: "几个紧的 hairpin——湿天 + hairpin = 死亡组合。", source: "Netrider 论坛" },
-    { icon: "❗", title: "森林覆盖让路面常年潮湿", note: "桉树皮 + 苔藓 + 散落石子常见。冬天部分路段有结冰风险。", source: "Spokes / 多篇博客" },
-    { icon: "⚠", title: "周末游客车流量大", note: "周末骑会跟在 SUV 后面爬山。建议工作日去——但留意 timber trucks 砍伐车。", source: "Shannons Club" },
-    { icon: "⚠", title: "限速摄像头", note: "是骑手必去的路也是警察必蹲的路。一切按 signed corner speeds 走。", source: "Netrider" },
-  ],
-  stops: [
-    { km: 0, name: "Healesville", note: "起点 · 早餐 / 咖啡 · 局部 cafe 多" },
-    { km: 8, name: "Fernshaw Picnic Area", note: "沿途休息点 · 卫生间" },
-    { km: 14, name: "Dom Dom Saddle", note: "panoramic view 观景台 · 必停" },
-    { km: 22, name: "Black Spur Motel", note: "加油站 + 餐 · 鸟类多 (king parrots, lorikeets)" },
-    { km: 28, name: "Narbethong", note: "Nuggetty Cafe · 路终点直接拐弯" },
-    { km: 32, name: "Marysville", note: "终点 · Bruno's Art Garden, Fat Tony's café" },
-    { km: 40, name: "Buxton (extra)", note: "'Bucky' Pub · 屋顶有摩托车 · 中途吃饭" },
-  ],
-  voices: [
-    {
-      quote: "go round the spur a few times to sniff out all the tricky bits before you tackle it full on. also check out reefton spur.",
-      who: "GSXR Mark",
-      where: "Netrider 2008 帖子",
-    },
-    {
-      quote: "The Spur has an 80k speed limit. Pay attention to the signed speeds for corners and you'll do fine. Treat it as a sight-seeing ride and you won't be going too fast for it.",
-      who: "Netrider 老司机",
-      where: "Netrider · Riding The Black Spur for the first time",
-    },
-    {
-      quote: "I prefer going from East to West on the Spur — being on the side closest the 'drop' edge gives you much greater visibility through the turns.",
-      who: "Netrider Mark",
-      where: "Netrider 论坛",
-    },
-    {
-      quote: "Definitely don't go there if it's wet. It's really slippery in winter because of the tree cover, the road stays damp and mossy in parts all the time.",
-      who: "Netrider",
-      where: "Netrider · 路况讨论",
-    },
-  ],
-  sources: [
-    { name: "motorcyclerides.com.au", url: "https://motorcyclerides.com.au/motorbike-rides/australia/vic/yarra-ranges/the-black-spur-yarra-ranges.html" },
-    { name: "Netrider 论坛", url: "https://netrider.net.au/threads/riding-the-black-spur-for-the-first-time.94055/" },
-    { name: "Shannons Club", url: "https://club.shannons.com.au/club/bike-news/bike-rides/victoria-black-spur-land-of-the-giants/" },
-    { name: "Spokes", url: "https://www.spokes.com.au/rides/the-black-spur" },
-    { name: "Leader Motorcycles", url: "https://www.leadermoto.com.au/blogs/news/top-10-scenic-motorcycle-rides-around-melbourne-and-victoria" },
-  ],
-};
 
 function BlackSpurGuide() {
   return (
@@ -3088,220 +3005,6 @@ function BikeCatalog() {
 
 /* ============ V6 新增：ResourceBox 资源链接组件 ============ */
 
-const chapterResources = {
-  licence: {
-    title: "拿牌资源",
-    en: "GO DO IT · LICENCE",
-    sections: [
-      {
-        label: "VicRoads 官方",
-        links: [
-          { name: "海外驾照转换", url: "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence", note: "中国驾照转换从这里开始" },
-          { name: "拿摩托车驾照", url: "https://www.vicroads.vic.gov.au/licences/your-licence/get-your-motorcycle-licence", note: "完全新手流程" },
-          { name: "LAMS 认证车型查询", url: "https://www.vicroads.vic.gov.au/safety-and-road-rules/motorcyclist-safety/approved-motorcycles-for-novice-riders", note: "买车前必查" },
-        ],
-      },
-      {
-        label: "驾校（墨尔本）",
-        links: [
-          { name: "Stay Upright", url: "https://stayupright.com.au/", note: "全澳最大，价格中等" },
-          { name: "HART (Honda Rider Training)", url: "https://www.hartride.com.au/", note: "Honda 旗下，专业度高" },
-          { name: "Ridetek", url: "https://www.ridetek.com.au/", note: "墨尔本本地，华人去得多" },
-          { name: "Top Rider Training", url: "https://www.toprider.com.au/", note: "西区驾校" },
-        ],
-      },
-      {
-        label: "翻译 + 工具",
-        links: [
-          { name: "NAATI 认证翻译查询", url: "https://www.naati.com.au/online/CPDDirectorySearch", note: "找你城市的认证翻译" },
-          { name: "VicRoads Handbook PDF", url: "https://www.vicroads.vic.gov.au/safety-and-road-rules/road-rules/road-to-solo-driving", note: "笔试题库" },
-        ],
-      },
-    ],
-  },
-  ride: {
-    title: "选车资源",
-    en: "GO DO IT · BIKES",
-    sections: [
-      {
-        label: "买车平台",
-        links: [
-          { name: "Bikesales · LAMS 墨尔本", url: "https://www.bikesales.com.au/bikes/lams/victoria-state/melbourne-region/", note: "澳洲最大摩托交易，新车 + 二手" },
-          { name: "Facebook Marketplace · 墨尔本摩托", url: "https://www.facebook.com/marketplace/melbourne/motorcycles/", note: "私人卖家，议价空间大" },
-          { name: "Gumtree · 墨尔本摩托", url: "https://www.gumtree.com.au/s-motorcycles-scooters/melbourne/c18342l3001317", note: "便宜车多但要小心" },
-          { name: "PPSR 二手车背景查询", url: "https://www.ppsr.gov.au/", note: "A$2 查欠款 / 偷车记录" },
-        ],
-      },
-      {
-        label: "墨尔本主要经销商",
-        links: [
-          { name: "Procycles", url: "https://www.procycles.com.au/", note: "Yamaha / Kawasaki / BMW / Triumph" },
-          { name: "Peter Stevens", url: "https://www.peterstevens.com.au/", note: "全品牌大店 · CBD" },
-          { name: "TeamMoto", url: "https://www.teammoto.com.au/", note: "全国连锁" },
-          { name: "Fraser Motorcycles", url: "https://www.frasermotorcycles.com.au/", note: "墨尔本本地老店" },
-        ],
-      },
-      {
-        label: "品牌官网",
-        links: [
-          { name: "Honda Australia", url: "https://hondamotorcycles.com.au/", note: "" },
-          { name: "Yamaha Australia", url: "https://www.yamaha-motor.com.au/", note: "" },
-          { name: "Kawasaki Australia", url: "https://www.kawasaki.com.au/", note: "" },
-          { name: "CFMoto Australia", url: "https://www.cfmoto.com.au/", note: "国产，性价比" },
-        ],
-      },
-    ],
-  },
-  gear: {
-    title: "装备资源",
-    en: "GO DO IT · GEAR",
-    sections: [
-      {
-        label: "本地实体店（推荐先试戴）",
-        links: [
-          { name: "AMX Superstores 墨尔本", url: "https://www.amxsuperstores.com.au/", note: "全澳连锁，库存最大" },
-          { name: "Peter Stevens", url: "https://www.peterstevens.com.au/products/category/riding-gear", note: "CBD 总店有装备区" },
-          { name: "MCAS", url: "https://www.mcas.com.au/", note: "Motorcycle Accessories Supermarket" },
-          { name: "MotoHeaven", url: "https://www.motoheaven.com.au/", note: "线下 + 网购" },
-        ],
-      },
-      {
-        label: "本地网购",
-        links: [
-          { name: "Bikebiz", url: "https://www.bikebiz.com.au/", note: "" },
-          { name: "MX Store", url: "https://www.mxstore.com.au/", note: "越野装备多" },
-          { name: "ProCycles 网店", url: "https://www.procycles.com.au/collections/all", note: "" },
-        ],
-      },
-      {
-        label: "淘宝 / 国内（性价比）",
-        links: [
-          { name: "赛羽 SCOYCO 天猫", url: "https://saiyu.tmall.com/", note: "国内最大装备厂，护具强项" },
-          { name: "杜汉 DUHAN 天猫", url: "https://duhan.tmall.com/", note: "皮衣强项" },
-          { name: "MOTOBOY 天猫", url: "https://motoboy.tmall.com/", note: "拉力服性价比" },
-        ],
-      },
-      {
-        label: "海淘（高端）",
-        links: [
-          { name: "RevZilla (美国)", url: "https://www.revzilla.com/", note: "Shoei / Arai 海淘比国内便宜" },
-          { name: "FortNine (加拿大)", url: "https://www.fortnine.ca/", note: "评测视频专业，可查规格" },
-          { name: "日亚 (摩托区)", url: "https://www.amazon.co.jp/-/en/Motorcycle/b?node=2381381051", note: "Shoei / Arai 日产正品" },
-        ],
-      },
-    ],
-  },
-  practice: {
-    title: "修行资源",
-    en: "GO DO IT · PRACTICE",
-    sections: [
-      {
-        label: "进阶训练课程",
-        links: [
-          { name: "Stay Upright Advanced", url: "https://stayupright.com.au/courses/advanced/", note: "拿牌后第一年首选" },
-          { name: "HART Skills Course", url: "https://www.hartride.com.au/courses/", note: "Honda 旗下进阶" },
-          { name: "California Superbike School Aus", url: "https://www.superbikeschool.com.au/", note: "压弯专项" },
-        ],
-      },
-      {
-        label: "练车场地（墨尔本）",
-        links: [
-          { name: "Calder Park (训练场)", url: "https://www.calderpark.com.au/", note: "西区，有摩托训练日" },
-          { name: "Sandown Raceway", url: "https://www.sandown.net.au/", note: "Track Days · 进阶骑手" },
-          { name: "Phillip Island Circuit", url: "https://www.phillipislandcircuit.com.au/", note: "国家级赛道，开放日" },
-        ],
-      },
-      {
-        label: "社区 / 社群",
-        links: [
-          { name: "Netrider (澳洲最大摩托论坛)", url: "https://netrider.net.au/", note: "英文，但信息密度高" },
-          { name: "Whirlpool Motorcycles 板块", url: "https://forums.whirlpool.net.au/forum/97", note: "澳洲本地讨论" },
-          { name: "FortNine YouTube", url: "https://www.youtube.com/@FortNine", note: "技术 + 评测顶流" },
-          { name: "DanDanTheFireman", url: "https://www.youtube.com/@DanDanTheFireman", note: "通勤骑手向" },
-        ],
-      },
-      {
-        label: "事故处理（VIC）",
-        links: [
-          { name: "Victoria Police Online Reporting", url: "https://www.police.vic.gov.au/online-reporting", note: "事后补报警 / 拿到 event number" },
-          { name: "TAC 索赔流程", url: "https://www.tac.vic.gov.au/what-to-do-after-an-accident", note: "无过错保险，注册费里就含" },
-          { name: "TAC 在线报案", url: "https://www.tac.vic.gov.au/clients/lodging-a-claim", note: "12 个月时限，越早越好" },
-          { name: "What3Words", url: "https://what3words.com/", note: "山区精准定位给救护车（VIC 急救认这个）" },
-        ],
-      },
-    ],
-  },
-  mountain: {
-    title: "入山资源",
-    en: "GO DO IT · MOUNTAINS",
-    sections: [
-      {
-        label: "路线 + 导航",
-        links: [
-          { name: "Strava (查路书)", url: "https://www.strava.com/segments/explore?keyword=Black+Spur", note: "搜路段名查别人轨迹" },
-          { name: "Google Maps 导航", url: "https://www.google.com/maps/dir/Healesville+VIC/Marysville+VIC/", note: "Black Spur 例:Healesville→Marysville" },
-          { name: "Best Biking Roads", url: "https://www.bestbikingroads.com/motorcycle-roads/australia/victoria/", note: "维州摩托路线社区评分" },
-        ],
-      },
-      {
-        label: "天气 + 风险",
-        links: [
-          { name: "VicEmergency (火险预警)", url: "https://emergency.vic.gov.au/", note: "夏天必查，山火预警" },
-          { name: "BOM 7 天天气", url: "https://www.bom.gov.au/vic/forecasts/melbourne.shtml", note: "墨尔本气象局" },
-          { name: "VicRoads 道路状况", url: "https://traffic.vicroads.vic.gov.au/", note: "实时封路 / 事故" },
-        ],
-      },
-      {
-        label: "工具",
-        links: [
-          { name: "Snitch (限速摄像头 app)", url: "https://www.snitchapp.com.au/", note: "全澳警察蹲点位置" },
-          { name: "FuelCheck VIC", url: "https://www.vic.gov.au/fuelcheckvic", note: "维州官方油价查询" },
-        ],
-      },
-    ],
-  },
-  insurance: {
-    title: "护身资源",
-    en: "GO DO IT · INSURANCE",
-    sections: [
-      {
-        label: "保险比价（必比 3-5 家）",
-        links: [
-          { name: "QBE Motorcycle", url: "https://www.qbe.com/au/motorcycle-insurance", note: "新手友好，inexperienced rider excess 透明" },
-          { name: "NRMA Insurance", url: "https://www.nrma.com.au/motorcycle-insurance", note: "全国大型，3M+ 客户" },
-          { name: "RACV Insurance", url: "https://www.racv.com.au/insurance/motor/motorcycle.html", note: "VIC 本地，老品牌" },
-          { name: "Insure My Ride", url: "https://www.insuremyride.com.au/", note: "摩托专属保险公司" },
-          { name: "Youi", url: "https://www.youi.com.au/motorcycle-insurance", note: "评测好，含骑行装备 cover" },
-        ],
-      },
-      {
-        label: "TAC（VIC 无过错保险）",
-        links: [
-          { name: "TAC 官网", url: "https://www.tac.vic.gov.au/", note: "VIC 注册自带，事故索赔从这里开始" },
-          { name: "TAC 索赔流程", url: "https://www.tac.vic.gov.au/what-to-do-after-an-accident", note: "12 个月时限" },
-          { name: "Greenslip 解释", url: "https://www.tac.vic.gov.au/about-the-tac/our-organisation/about-the-tac/our-history", note: "VIC 的 CTP 叫 TAC charge，含在 reg 里" },
-        ],
-      },
-      {
-        label: "防盗装备",
-        links: [
-          { name: "Abus Granit Detecto", url: "https://www.amxsuperstores.com.au/", note: "AMX 售：碟刹锁带警报，A$150-200" },
-          { name: "Kryptonite New York Chain", url: "https://www.bikebiz.com.au/", note: "Bikebiz 售：18mm 链条锁，A$200-250" },
-          { name: "Datatool 警报器", url: "https://www.peterstevens.com.au/", note: "Peter Stevens 安装，A$300-500" },
-          { name: "AirTag 隐藏", url: "https://www.apple.com/au/shop/buy-airtag", note: "塞进座下电瓶舱——A$45 兜底" },
-        ],
-      },
-      {
-        label: "比价工具 + 论坛经验",
-        links: [
-          { name: "Finder 摩托保险比价", url: "https://www.finder.com.au/car-insurance/motorcycle-insurance", note: "不直接卖，给整体行情" },
-          { name: "Whirlpool 保险讨论", url: "https://forums.whirlpool.net.au/forum/97", note: "真实骑手报价分享" },
-          { name: "Netrider Insurance", url: "https://netrider.net.au/forums/insurance/", note: "澳洲摩托圈最大讨论区" },
-        ],
-      },
-    ],
-  },
-};
 
 function ResourceBox({ chapter }) {
   const data = chapterResources[chapter];
@@ -3382,86 +3085,6 @@ function ResourceBox({ chapter }) {
 
 /* ============ V6 新增：中国 ↔ 这里 跨语言对比组件 ============ */
 
-const chapterCompare = {
-  licence: {
-    title: "中国 ↔ 墨尔本 · 拿牌差异",
-    en: "CN ↔ MEL · LICENCE",
-    rows: [
-      { item: "驾照分类", cn: "E（≥250cc）/ F（≤250cc）/ D（轻便）", au: "L 牌 → P 牌（红/绿）→ Full" },
-      { item: "拿牌时长", cn: "场地考一次过 · 2-4 周", au: "L 牌持有 ≥3 个月 + Day 2 评估" },
-      { item: "笔试语言", cn: "中文", au: "L 牌阶段 VicRoads 提供中文版 Handbook" },
-      { item: "路考形式", cn: "场地桩考", au: "Day 2：真实道路骑行 + 自带车" },
-      { item: "总成本", cn: "RMB 2000-4000", au: "A$870-1370（驾校 + VicRoads 牌照费）" },
-      { item: "海外持照", cn: "—", au: "持有效摩托驾照 ≥3 年 → 直接 Full、免 LAMS" },
-    ],
-    note: "中国 D/E 摩托驾照在澳洲 (VIC) 已经不能直接换——2025.4.30 起 EDR 废止。但持照 ≥3 年仍可经过短考试拿 Full 牌，跳过 P 牌期。",
-  },
-  ride: {
-    title: "中国 ↔ 墨尔本 · 买车差异",
-    en: "CN ↔ MEL · BUY",
-    rows: [
-      { item: "二手平台", cn: "闲鱼 / 摩托车大全 / 哈罗摩托", au: "Bikesales / FB Marketplace / Gumtree" },
-      { item: "议价幅度", cn: "10-30% 砍价正常", au: "5-10% 温和议价（标价已含留议价空间）" },
-      { item: "验车", cn: "自己看 / 摩友帮看", au: "PPSR check（A$2 查欠款 + 偷车记录）必做" },
-      { item: "过户", cn: "车管所一次办", au: "卖家 + 买家各自填表 + 在线缴费（VicRoads）" },
-      { item: "上牌", cn: "4S 店代办", au: "新车经销商代办 / 二手车自己 VicRoads 上" },
-      { item: "国产 CFMoto", cn: "本土主流，售后遍地", au: "入澳 ~5 年，新手友好但售后网点少" },
-    ],
-    note: "在墨尔本买二手车，PPSR check 一定要做。RMB 10 都不到，但能查出车有没有欠款（被银行抵押）或被报失（偷车）——欠款车被买后银行可以把车拖走。",
-  },
-  gear: {
-    title: "中国 ↔ 墨尔本 · 装备差异",
-    en: "CN ↔ MEL · GEAR",
-    rows: [
-      { item: "头盔认证", cn: "国家 3C / GB 24429", au: "AS/NZS 1698 或 ECE 22.05 / 22.06" },
-      { item: "国产头盔", cn: "正规渠道合法", au: "戴上路违法 · 罚 ~A$300 + 扣 3 分" },
-      { item: "国际版 Shoei/Arai", cn: "淘宝可买（带 ECE）", au: "合法 · 海运可行" },
-      { item: "顶级品牌价格", cn: "Shoei X-15 ¥7-9k", au: "Shoei X-15 A$1500-2000（贵 ~50%）" },
-      { item: "国产护具", cn: "赛羽 / 杜汉 / MOTOBOY 主流", au: "无澳洲渠道 · 必海运" },
-      { item: "本地店买", cn: "—", au: "AMX / Peter Stevens / MCAS（可现场试戴）" },
-    ],
-    note: "头盔不要图便宜买淘宝普通款戴上路——警察一查无 AS/NZS 1698 或 ECE 标志直接罚。要买淘宝就买「国际版」「出口版」——这些带 ECE 22.05 标志，合法。",
-  },
-  practice: {
-    title: "中国 ↔ 墨尔本 · 练车与团骑差异",
-    en: "CN ↔ MEL · PRACTICE",
-    rows: [
-      { item: "团骑组织", cn: "微信群 / 摩友会", au: "FB Group / Meetup / Netrider 论坛" },
-      { item: "团骑距离", cn: "跟车较紧 / 加油站集合", au: "山路保持 3 秒间隔 / 直路 2 秒" },
-      { item: "Lane filter", cn: "随意穿插", au: "≤30 km/h 合法 · 校区/学校/重型车旁禁止" },
-      { item: "路上挥手", cn: "少见", au: "对面摩托见到要左手 V 字回礼（社交礼仪）" },
-      { item: "进阶训练", cn: "私教零散", au: "Stay Upright Advanced / Track Day 体系完整" },
-      { item: "Track Day", cn: "罕见 / 自办", au: "Phillip Island / Sandown 每月开放" },
-    ],
-    note: "墨尔本骑手挥手文化是真的——长途路上对面摩托过来不挥手会被觉得没礼貌。手势：左手低位伸出，V 字（食指 + 中指）。",
-  },
-  mountain: {
-    title: "中国 ↔ 墨尔本 · 跑山差异",
-    en: "CN ↔ MEL · MOUNTAINS",
-    rows: [
-      { item: "限速 / 测速", cn: "山路常 60-80 / Camera 少", au: "山路 100 km/h 但 Camera 密集（必装 Snitch）" },
-      { item: "路面风险", cn: "落石 / 修路 / 货车", au: "袋鼠（清晨黄昏高发）/ 苔藓 / 周末拥堵" },
-      { item: "加油", cn: "沿途加油站多", au: "山区加油站稀少 · 必算续航（出门加满）" },
-      { item: "紧急号", cn: "110 / 120", au: "000（VIC 通用）+ What3Words app（精准定位给救护）" },
-      { item: "夏季风险", cn: "暴雨", au: "山火预警 + 极端高温（必查 VicEmergency）" },
-      { item: "冬季风险", cn: "冰雪", au: "山区结冰（Mt Donna Buang/Lake Mountain 最重）" },
-    ],
-    note: "袋鼠是墨尔本山路最危险的事——清晨日出前 1h、黄昏日落后 1h 是它们出来的高峰，撞上去 100% 摔车。这两个时段尽量不进山。",
-  },
-  insurance: {
-    title: "中国 ↔ 墨尔本 · 保险差异",
-    en: "CN ↔ MEL · INSURANCE",
-    rows: [
-      { item: "强制险", cn: "交强险（人保 / 平安）单独购买", au: "VIC 已含在 reg fee（TAC 无过错保险）" },
-      { item: "无过错原则", cn: "事故定责后赔偿", au: "TAC：不论谁错，受伤人都能索赔医疗" },
-      { item: "驾龄计算", cn: "汽车驾龄 + 摩托驾龄合并", au: "只算摩托驾龄——汽车老司机也算「新手」" },
-      { item: "新手溢价", cn: "约 + 10-30%", au: "持照 < 3 年 → 1.5-3 倍溢价 + 高 excess" },
-      { item: "选公司方式", cn: "几大国有 + 三方比价", au: "5+ 家比价（QBE / NRMA / RACV / Insure My Ride / Youi）" },
-      { item: "停车防盗", cn: "小区固定停车", au: "墨尔本盗车率高 · Disc lock + chain lock 双重" },
-    ],
-    note: "中国 D/E 驾照转换者最容易踩的坑：保险公司只看你 VIC 摩托驾龄，不认你国内汽车驾龄。所以即使你 30 岁开了 10 年车，第一年保险费还是按「新手」算。",
-  },
-};
 
 function CrossCompare({ chapter }) {
   const data = chapterCompare[chapter];
@@ -3566,46 +3189,7 @@ function CrossCompare({ chapter }) {
 
 /* ============ V6 新增：淘宝海运红绿灯组件 ============ */
 
-const taobaoShippingData = {
-  green: {
-    label: "可海运 · 戴上路合法",
-    color: "#4a8b4f",
-    items: [
-      { name: "国际版 / 出口版头盔", note: "淘宝搜「Shoei 国际版」「Arai 出口版」「AGV ECE」——带 ECE 22.05 标志，合法上路" },
-      { name: "手套（夏季 / 冬季 / 雨季）", note: "赛羽 / KOMINE 国内版 / 杜汉，性价比远超本地" },
-      { name: "护具马甲 / 护膝 / 护肘", note: "MOTOBOY 拉力服 / 赛羽护具，护甲价格仅本地 1/3" },
-      { name: "雨衣 / 反光背心", note: "完全无认证要求" },
-      { name: "骑行包 / 油箱包 / 尾包", note: "无认证要求" },
-      { name: "通讯耳机（Cardo / Sena 中国版）", note: "国内代理货约 RMB 1500，澳洲价 A$500+" },
-    ],
-  },
-  yellow: {
-    label: "可海运 · 但⚠️戴上路违法",
-    color: "#c9a233",
-    items: [
-      { name: "国内 3C 认证头盔（GB 24429）", note: "淘宝大多数普通头盔——只有中国 3C 标志。澳洲警察查到罚 A$300 + 扣 3 分" },
-      { name: "仿货 / 山寨皮衣", note: "假 CE 认证标志 = 出事故时护具失效" },
-      { name: "改装件：消音器 / 排气", note: "海运没问题，装上去过 RWC（Roadworthy Certificate）困难" },
-    ],
-  },
-  red: {
-    label: "禁运 · 海关会扣",
-    color: "#c73e1d",
-    items: [
-      { name: "锂电池类", note: "加热手套 / 加热背心 / 通讯耳机单独邮寄电池——空运严禁，海运需特殊申报" },
-      { name: "燃料 / 化学品", note: "防爆罐 / 燃油添加剂 / 链条清洁剂（部分含 carb cleaner）" },
-      { name: "气溶胶罐（aerosol）", note: "轮胎补气罐 / 防锈喷雾——快递公司一律拒收" },
-      { name: "未授权改装电子件", note: "射灯 / 喇叭等可能涉及电磁兼容（EMC）认证问题" },
-    ],
-  },
-};
 
-const shippingChannels = [
-  { name: "淘宝官方集运 · 空运", time: "10-20 天", price: "¥63/kg 起", best: "急件 / 小件 / 头盔单发" },
-  { name: "淘宝官方集运 · 海运", time: "40-45 天", price: "¥66/kg 起", best: "大件 / 整套装备 / 不急" },
-  { name: "第三方转运（中环 / 4PX / 燕文）", time: "5-15 天", price: "比官方便宜 ~28%", best: "多店多件合并发运" },
-  { name: "回国探亲带回", time: "当天", price: "免（行李额内）", best: "头盔 / 大件 / 怕摔的精密装备" },
-];
 
 function TaobaoShipping() {
   return (
@@ -3682,70 +3266,10 @@ function TaobaoShipping() {
 
 /* ============ 06 护身 / INSURANCE · 新增章节 ============ */
 
-const insuranceLayers = [
-  {
-    num: "01",
-    type: "CTP / TAC",
-    en: "Compulsory Third Party",
-    cn: "强制第三方人身险",
-    cost: "A$0（已含 reg）",
-    cover: "事故造成他人受伤时的医疗赔偿",
-    detail: "VIC 已含在车辆注册费里——交了 reg 就有。这是法律最低线。",
-    enough: false,
-  },
-  {
-    num: "02",
-    type: "Third Party Property",
-    en: "TPP",
-    cn: "第三方财产险",
-    cost: "A$200-500/年",
-    cover: "你撞了别人的车 / 财产 → 赔他",
-    detail: "你撞了一辆 Tesla 你赔不起的——这险就是为这个买的。",
-    enough: false,
-  },
-  {
-    num: "03",
-    type: "Comprehensive",
-    en: "全险",
-    cn: "综合险",
-    cost: "A$500-3,800/年",
-    cover: "撞别人 + 自己的车 + 偷车 + 火灾 + 泼撒",
-    detail: "新车 / 贷款车 / 价值 > A$8k 的车 → 必须买综合险。",
-    enough: true,
-  },
-];
 
-const insuranceCompanies = [
-  { name: "QBE", url: "https://www.qbe.com/au/motorcycle-insurance", focus: "新手友好", priceNew: "A$700-1.5k", priceExp: "A$400-700", note: "Inexperienced rider excess 透明，行业标杆" },
-  { name: "NRMA", url: "https://www.nrma.com.au/motorcycle-insurance", focus: "全国大型", priceNew: "A$650-1.2k", priceExp: "A$320-600", note: "3M+ 客户，理赔体验稳定" },
-  { name: "RACV", url: "https://www.racv.com.au/insurance/motor/motorcycle.html", focus: "VIC 本地", priceNew: "A$700-1.4k", priceExp: "A$380-680", note: "墨尔本骑手首选，与 Swann 同承保" },
-  { name: "Insure My Ride", url: "https://www.insuremyride.com.au/", focus: "摩托专属", priceNew: "A$800-3.8k", priceExp: "A$400-900", note: "摩托特化，但新手报价偏高" },
-  { name: "Youi", url: "https://www.youi.com.au/motorcycle-insurance", focus: "装备覆盖好", priceNew: "A$750-1.5k", priceExp: "A$420-800", note: "含骑行装备险 + 24h 道路救援" },
-];
 
-const newRiderRules = [
-  { factor: "持照年限", impact: "< 3 年高溢价", detail: "保险公司只看你 VIC 摩托驾龄。即使你国内开车 10 年——这里也是新手。" },
-  { factor: "年龄", impact: "< 25 岁 + 50%", detail: "25 岁是分水岭。30 岁 + 持照 3 年是性价比最高的组合。" },
-  { factor: "车辆价值", impact: "决定要不要综合险", detail: "二手 < A$5k 的车买第三方财产就够。新车 / > A$8k 必须综合。" },
-  { factor: "停车位置", impact: "锁车库省 10-20%", detail: "申报为「locked garage」比「driveway」便宜。但保险公司可能验证。" },
-  { factor: "Rider Training", impact: "完成驾校认证 -5%", detail: "Stay Upright / HART 完成认证课程可享 Rider Training Course Discount。" },
-  { factor: "改装", impact: "未申报 = 全部失效", detail: "排气、ECU、踏板——任何改装必须告诉保险公司，否则索赔被拒。" },
-];
 
-const theftSpots = [
-  { suburb: "CBD / Southbank / Docklands", level: "极高", reason: "公共停车 + 流动人口多 + 监控覆盖低" },
-  { suburb: "Footscray / Sunshine / Dandenong", level: "高", reason: "工业区周边，作案后好脱手" },
-  { suburb: "Brunswick / Fitzroy / Collingwood", level: "中高", reason: "夜生活区，凌晨高发" },
-  { suburb: "South Yarra / Toorak", level: "中", reason: "目标车辆贵，作案有针对性" },
-  { suburb: "Box Hill / Glen Waverley", level: "低", reason: "华人聚居，监控密度高" },
-];
 
-const lockKit = [
-  { item: "Disc Lock + 警报", price: "A$150-200", brand: "Abus Granit Detecto / Xena", role: "前轮锁碟，挪动触发警报" },
-  { item: "Chain Lock 18mm+", price: "A$200-300", brand: "Kryptonite New York / Almax Series III", role: "锁后轮到固定物（路桩 / 车架）" },
-  { item: "Cover 车罩", price: "A$50-100", brand: "Oxford Aquatex / Nelson-Rigg", role: "「不显眼」是最强防盗——窃贼挑显眼的下手" },
-  { item: "Tracker / AirTag", price: "A$45-300", brand: "AirTag / Datatool S4", role: "丢了能找回。AirTag 必须藏车上隐蔽位置" },
-];
 
 function InsuranceSection() {
   return (
@@ -4044,6 +3568,8 @@ function InsuranceSection() {
       </div>
 
       <ChapterOutro
+        chapterId="insurance"
+        chapterTitle="06 护身 · INSURANCE"
         summary={[
           "VIC 强制保险 (TAC) 已含在 reg fee 里——无过错医疗险",
           "新手第一年溢价 1.5-3 倍——比价 3-5 家是必修",

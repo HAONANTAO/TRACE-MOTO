@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 部署后替换成你的真实域名
+Sitemap: https://wayfarer-phi.vercel.app/sitemap.xml

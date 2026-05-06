@@ -256,3 +256,565 @@ export const lamsModRules = [
   { name: "Bar end mirror / 后视镜", legal: true, ins: true, note: "视野改善反而更安全" },
   { name: "Vinyl wrap / 贴纸 / 喷漆", legal: true, ins: true, note: "外观改装，没问题" },
 ];
+
+
+/* ===== 以下为后期迁移的数据（原内联在 App.jsx）===== */
+
+export const gearBrandsByRegion = {
+  helmet: {
+    cn: "头盔", en: "HELMET",
+    insight: "唯一不能在淘宝省的——澳洲法律强制 AS/NZS 1698 认证。第一顶必须本地买。下面国内品牌仅作参考，戴上路前必须确认认证。",
+    regions: [
+      { region: "本地买（合法）", en: "LOCAL · AU LEGAL", priority: true,
+        brands: [
+          { name: "Shoei NXR2 / X-15", price: "A$849–1399", origin: "日本本厂", note: "中椭圆头型，业界标杆" },
+          { name: "AGV K6S / Pista", price: "A$849–1899", origin: "意大利", note: "中椭圆，轻、运动感强" },
+          { name: "Arai Signet-X", price: "A$1199–1599", origin: "日本", note: "长椭圆专属——国内罕见" },
+          { name: "HJC RPHA 11", price: "A$549–849", origin: "韩国", note: "偏圆，性价比之选" },
+          { name: "LS2 FF902", price: "A$229–349", origin: "西班牙", note: "入门首选" },
+          { name: "Bell Qualifier", price: "A$249–399", origin: "美国", note: "美式经典，圆头型友好" },
+          { name: "Scorpion EXO-R1", price: "A$699–1099", origin: "美国", note: "竞速级，轻量碳纤" },
+        ] },
+      { region: "日本海淘（性价比）", en: "JAPAN IMPORT",
+        brands: [
+          { name: "Shoei (日亚)", price: "比国内便宜 20–50%", origin: "日本本厂", note: "日本头型偏小，XL 买 XXL" },
+          { name: "Arai (日亚)", price: "比国内便宜 30%", origin: "日本本厂", note: "海关可能抽查 + AS/NZS 缺失" },
+          { name: "OGK Kabuto", price: "¥1500–3500", origin: "旗舰日产 / 半盔青岛产", note: "性价比日系" },
+        ] },
+      { region: "国内主流品牌（仅供参考）", en: "DOMESTIC CN · INFO ONLY", warning: true,
+        brands: [
+          { name: "永恒 YOHE", price: "¥400–1500", origin: "广东深圳 1995", note: "国内老牌，中端代表，3C 通过" },
+          { name: "野马 YEMA", price: "¥200–800", origin: "广东中山", note: "国产入门最常见，外卖小哥常戴" },
+          { name: "摩雷士 MOTORAX", price: "¥600–2000", origin: "广东", note: "中端国产，做工较稳" },
+          { name: "LS2 国行", price: "¥800–1500", origin: "西班牙国内代理", note: "可能不带 AS/NZS——验证认证" },
+          { name: "AGV K6S 国行", price: "¥3500–5500", origin: "国内代理", note: "认证需逐个核实" },
+          { name: "MT Helmets 国行", price: "¥600–1500", origin: "西班牙国内代理", note: "ECE 22.05 认证版较常见" },
+          { name: "Shoei (海淘水货)", price: "¥3000–8000", origin: "正规代理仅 2 家", note: "其他淘宝店多为水货——很多假货" },
+          { name: "义乌白牌", price: "¥150–500", origin: "义乌/惠州", note: "假认证横行——别买戴上路" },
+        ] },
+    ],
+  },
+  jacket: {
+    cn: "骑行夹克", en: "JACKET",
+    insight: "国产 ¥500-1500 性价比最猛；欧版剪裁宽肩，亚洲身形偏大；日系最贴合东方身形。",
+    regions: [
+      { region: "国际大牌（本地零售）", en: "INTERNATIONAL · LOCAL",
+        brands: [
+          { name: "Alpinestars T-GP", price: "A$599–899", origin: "意大利 1963", note: "MotoGP 御用 · A 星" },
+          { name: "Dainese Avro", price: "A$899–1599", origin: "意大利", note: "首创背心防护，欧版宽肩" },
+          { name: "Rev'It Sand 4", price: "A$799–1199", origin: "荷兰", note: "拉力风格，复古党之选" },
+          { name: "DriRider RX-3", price: "A$399", origin: "澳洲本土", note: "本土实用主义" },
+          { name: "Rjays Tour-Tek", price: "A$429–649", origin: "澳洲本土", note: "本土性价比之选" },
+        ] },
+      { region: "日系（贴合东方身形）", en: "JAPANESE",
+        brands: [
+          { name: "KOMINE 真品", price: "¥800–2500", origin: "日产/越南/印尼", note: "新款多东南亚产，老日产更稀有" },
+          { name: "RS Taichi", price: "¥1500–4000", origin: "日本", note: "海淘比国内便宜 20-30%" },
+          { name: "POWERAGE", price: "¥1200–3000", origin: "日本", note: "皮衣 + 通勤夹克双线" },
+        ] },
+      { region: "国产性价比", en: "DOMESTIC · CHINA", priority: true,
+        brands: [
+          { name: "赛羽 SCOYCO", price: "¥800–1500", origin: "佛山 1998 · 国内最大厂", note: "JK48 经典款，国内最大装备生产商" },
+          { name: "MOTOBOY", price: "¥600–1200", origin: "国产", note: "拉力服 + 四季款，进藏常见" },
+          { name: "杜汉 DUHAN", price: "¥800–2000", origin: "深圳 1999", note: "机车皮衣强项，OEM 出口" },
+          { name: "雷翅 RACEX", price: "¥1000–2000", origin: "山东 2016", note: "拉力服专精，赛车风格" },
+          { name: "NERVE 涅夫", price: "¥1500–3500", origin: "唐山+巴基斯坦", note: "号称德国其实国产" },
+          { name: "PSE 派加", price: "¥1500–4000", origin: "国产", note: "牛皮夹克专精，复古党之选" },
+          { name: "BENKIA", price: "¥400–1200", origin: "广东", note: "防摔服装入门款常见" },
+          { name: "MOTOWOLF 摩托狼", price: "¥500–1500", origin: "国产", note: "拉力 + 防摔款全覆盖" },
+          { name: "VENTURA", price: "¥800–2000", origin: "国产", note: "中端拉力服" },
+          { name: "BARK 巴克", price: "¥500–1500", origin: "国产", note: "复古款 + 牛仔骑行裤" },
+        ] },
+    ],
+  },
+  gloves: {
+    cn: "手套 / 护具", en: "GLOVES & ARMOR",
+    insight: "护具是国产的强项——赛羽手套累计销量 900 万双，护具 500 万双。CE 认证普及。",
+    regions: [
+      { region: "国际大牌（本地）", en: "LOCAL",
+        brands: [
+          { name: "Five RFX1 / Knox", price: "A$129–229", origin: "法国 / 英国", note: "本地最常见入门" },
+          { name: "Held Phantom", price: "A$229+", origin: "德国", note: "顶级手套之选" },
+          { name: "Alpinestars GP Plus", price: "A$229+", origin: "意大利", note: "竞速手套" },
+          { name: "Dainese Carbon 4", price: "A$329+", origin: "意大利", note: "碳纤护节，赛道级" },
+          { name: "Rev'It Sand 4", price: "A$169–229", origin: "荷兰", note: "夏季拉力首选" },
+        ] },
+      { region: "日系", en: "JAPANESE",
+        brands: [
+          { name: "KOMINE GK 系列", price: "¥150–500", origin: "日本品牌·东南亚产", note: "经典通勤手套" },
+          { name: "RS Taichi", price: "¥400–1500", origin: "日本", note: "运动 + 通勤皆可" },
+          { name: "GOLDWIN", price: "¥800–2000", origin: "日本", note: "防水冬季款见长" },
+        ] },
+      { region: "国产（强项）", en: "DOMESTIC", priority: true,
+        brands: [
+          { name: "赛羽 SCOYCO", price: "¥150–500", origin: "佛山", note: "手套护具是赛羽强项·900 万双销量" },
+          { name: "PRO-BIKER 赛车手", price: "¥80–300", origin: "广州", note: "国内入门最经典款，万元级机车也有人戴" },
+          { name: "摩雷士 MOTORAX", price: "¥300–500", origin: "国产", note: "中端手套口碑稳" },
+          { name: "瑞德兹 RIDEZ", price: "¥250–800", origin: "国产", note: "护具 + 手套" },
+          { name: "BENKIA", price: "¥150–400", origin: "广东", note: "防摔款入门常见" },
+          { name: "MOTOWOLF 摩托狼", price: "¥120–400", origin: "国产", note: "防雨防风款经典" },
+          { name: "FUEL 富勒尔", price: "¥200–500", origin: "国产", note: "复古款 + 触屏功能" },
+          { name: "MASONTEX", price: "¥150–400", origin: "国产", note: "性价比夏季款" },
+        ] },
+    ],
+  },
+};
+
+export const blackSpurData = {
+  // 来自 motorcyclerides.com.au + Netrider + Shannons Club + 多篇骑手博客的综合数据
+  basics: {
+    coreLength: "11 km core (核心 hairpin 段)",
+    fullRoute: "32 km Healesville → Marysville",
+    cornerRatio: "80% 弯道",
+    direction: "推荐 East → West（上坡更安全，刹车好控）",
+    surface: "近年重铺沥青，bitumen grip 优良",
+    distanceFromCBD: "Healesville 起点距墨尔本 CBD 约 60 km",
+  },
+  warnings: [
+    { icon: "❗", title: "没有路肩", note: "跑偏不是撞山就是飞下悬崖——这是为什么它被列为维州摩托事故黑点。", source: "Noobiker / Spokes" },
+    { icon: "❗", title: "Hairpin 连续", note: "几个紧的 hairpin——湿天 + hairpin = 死亡组合。", source: "Netrider 论坛" },
+    { icon: "❗", title: "森林覆盖让路面常年潮湿", note: "桉树皮 + 苔藓 + 散落石子常见。冬天部分路段有结冰风险。", source: "Spokes / 多篇博客" },
+    { icon: "⚠", title: "周末游客车流量大", note: "周末骑会跟在 SUV 后面爬山。建议工作日去——但留意 timber trucks 砍伐车。", source: "Shannons Club" },
+    { icon: "⚠", title: "限速摄像头", note: "是骑手必去的路也是警察必蹲的路。一切按 signed corner speeds 走。", source: "Netrider" },
+  ],
+  stops: [
+    { km: 0, name: "Healesville", note: "起点 · 早餐 / 咖啡 · 局部 cafe 多" },
+    { km: 8, name: "Fernshaw Picnic Area", note: "沿途休息点 · 卫生间" },
+    { km: 14, name: "Dom Dom Saddle", note: "panoramic view 观景台 · 必停" },
+    { km: 22, name: "Black Spur Motel", note: "加油站 + 餐 · 鸟类多 (king parrots, lorikeets)" },
+    { km: 28, name: "Narbethong", note: "Nuggetty Cafe · 路终点直接拐弯" },
+    { km: 32, name: "Marysville", note: "终点 · Bruno's Art Garden, Fat Tony's café" },
+    { km: 40, name: "Buxton (extra)", note: "'Bucky' Pub · 屋顶有摩托车 · 中途吃饭" },
+  ],
+  voices: [
+    {
+      quote: "go round the spur a few times to sniff out all the tricky bits before you tackle it full on. also check out reefton spur.",
+      who: "GSXR Mark",
+      where: "Netrider 2008 帖子",
+    },
+    {
+      quote: "The Spur has an 80k speed limit. Pay attention to the signed speeds for corners and you'll do fine. Treat it as a sight-seeing ride and you won't be going too fast for it.",
+      who: "Netrider 老司机",
+      where: "Netrider · Riding The Black Spur for the first time",
+    },
+    {
+      quote: "I prefer going from East to West on the Spur — being on the side closest the 'drop' edge gives you much greater visibility through the turns.",
+      who: "Netrider Mark",
+      where: "Netrider 论坛",
+    },
+    {
+      quote: "Definitely don't go there if it's wet. It's really slippery in winter because of the tree cover, the road stays damp and mossy in parts all the time.",
+      who: "Netrider",
+      where: "Netrider · 路况讨论",
+    },
+  ],
+  sources: [
+    { name: "motorcyclerides.com.au", url: "https://motorcyclerides.com.au/motorbike-rides/australia/vic/yarra-ranges/the-black-spur-yarra-ranges.html" },
+    { name: "Netrider 论坛", url: "https://netrider.net.au/threads/riding-the-black-spur-for-the-first-time.94055/" },
+    { name: "Shannons Club", url: "https://club.shannons.com.au/club/bike-news/bike-rides/victoria-black-spur-land-of-the-giants/" },
+    { name: "Spokes", url: "https://www.spokes.com.au/rides/the-black-spur" },
+    { name: "Leader Motorcycles", url: "https://www.leadermoto.com.au/blogs/news/top-10-scenic-motorcycle-rides-around-melbourne-and-victoria" },
+  ],
+};
+
+export const chapterResources = {
+  licence: {
+    title: "拿牌资源",
+    en: "GO DO IT · LICENCE",
+    sections: [
+      {
+        label: "VicRoads 官方",
+        links: [
+          { name: "海外驾照转换", url: "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence", note: "中国驾照转换从这里开始" },
+          { name: "拿摩托车驾照", url: "https://www.vicroads.vic.gov.au/licences/your-licence/get-your-motorcycle-licence", note: "完全新手流程" },
+          { name: "LAMS 认证车型查询", url: "https://www.vicroads.vic.gov.au/safety-and-road-rules/motorcyclist-safety/approved-motorcycles-for-novice-riders", note: "买车前必查" },
+        ],
+      },
+      {
+        label: "驾校（墨尔本）",
+        links: [
+          { name: "Stay Upright", url: "https://stayupright.com.au/", note: "全澳最大，价格中等" },
+          { name: "HART (Honda Rider Training)", url: "https://www.hartride.com.au/", note: "Honda 旗下，专业度高" },
+          { name: "Ridetek", url: "https://www.ridetek.com.au/", note: "墨尔本本地，华人去得多" },
+          { name: "Top Rider Training", url: "https://www.toprider.com.au/", note: "西区驾校" },
+        ],
+      },
+      {
+        label: "翻译 + 工具",
+        links: [
+          { name: "NAATI 认证翻译查询", url: "https://www.naati.com.au/online/CPDDirectorySearch", note: "找你城市的认证翻译" },
+          { name: "VicRoads Handbook PDF", url: "https://www.vicroads.vic.gov.au/safety-and-road-rules/road-rules/road-to-solo-driving", note: "笔试题库" },
+        ],
+      },
+    ],
+  },
+  ride: {
+    title: "选车资源",
+    en: "GO DO IT · BIKES",
+    sections: [
+      {
+        label: "买车平台",
+        links: [
+          { name: "Bikesales · LAMS 墨尔本", url: "https://www.bikesales.com.au/bikes/lams/victoria-state/melbourne-region/", note: "澳洲最大摩托交易，新车 + 二手" },
+          { name: "Facebook Marketplace · 墨尔本摩托", url: "https://www.facebook.com/marketplace/melbourne/motorcycles/", note: "私人卖家，议价空间大" },
+          { name: "Gumtree · 墨尔本摩托", url: "https://www.gumtree.com.au/s-motorcycles-scooters/melbourne/c18342l3001317", note: "便宜车多但要小心" },
+          { name: "PPSR 二手车背景查询", url: "https://www.ppsr.gov.au/", note: "A$2 查欠款 / 偷车记录" },
+        ],
+      },
+      {
+        label: "墨尔本主要经销商",
+        links: [
+          { name: "Procycles", url: "https://www.procycles.com.au/", note: "Yamaha / Kawasaki / BMW / Triumph" },
+          { name: "Peter Stevens", url: "https://www.peterstevens.com.au/", note: "全品牌大店 · CBD" },
+          { name: "TeamMoto", url: "https://www.teammoto.com.au/", note: "全国连锁" },
+          { name: "Fraser Motorcycles", url: "https://www.frasermotorcycles.com.au/", note: "墨尔本本地老店" },
+        ],
+      },
+      {
+        label: "品牌官网",
+        links: [
+          { name: "Honda Australia", url: "https://hondamotorcycles.com.au/", note: "" },
+          { name: "Yamaha Australia", url: "https://www.yamaha-motor.com.au/", note: "" },
+          { name: "Kawasaki Australia", url: "https://www.kawasaki.com.au/", note: "" },
+          { name: "CFMoto Australia", url: "https://www.cfmoto.com.au/", note: "国产，性价比" },
+        ],
+      },
+    ],
+  },
+  gear: {
+    title: "装备资源",
+    en: "GO DO IT · GEAR",
+    sections: [
+      {
+        label: "本地实体店（推荐先试戴）",
+        links: [
+          { name: "AMX Superstores 墨尔本", url: "https://www.amxsuperstores.com.au/", note: "全澳连锁，库存最大" },
+          { name: "Peter Stevens", url: "https://www.peterstevens.com.au/products/category/riding-gear", note: "CBD 总店有装备区" },
+          { name: "MCAS", url: "https://www.mcas.com.au/", note: "Motorcycle Accessories Supermarket" },
+          { name: "MotoHeaven", url: "https://www.motoheaven.com.au/", note: "线下 + 网购" },
+        ],
+      },
+      {
+        label: "本地网购",
+        links: [
+          { name: "Bikebiz", url: "https://www.bikebiz.com.au/", note: "" },
+          { name: "MX Store", url: "https://www.mxstore.com.au/", note: "越野装备多" },
+          { name: "ProCycles 网店", url: "https://www.procycles.com.au/collections/all", note: "" },
+        ],
+      },
+      {
+        label: "淘宝 / 国内（性价比）",
+        links: [
+          { name: "赛羽 SCOYCO 天猫", url: "https://saiyu.tmall.com/", note: "国内最大装备厂，护具强项" },
+          { name: "杜汉 DUHAN 天猫", url: "https://duhan.tmall.com/", note: "皮衣强项" },
+          { name: "MOTOBOY 天猫", url: "https://motoboy.tmall.com/", note: "拉力服性价比" },
+        ],
+      },
+      {
+        label: "海淘（高端）",
+        links: [
+          { name: "RevZilla (美国)", url: "https://www.revzilla.com/", note: "Shoei / Arai 海淘比国内便宜" },
+          { name: "FortNine (加拿大)", url: "https://www.fortnine.ca/", note: "评测视频专业，可查规格" },
+          { name: "日亚 (摩托区)", url: "https://www.amazon.co.jp/-/en/Motorcycle/b?node=2381381051", note: "Shoei / Arai 日产正品" },
+        ],
+      },
+    ],
+  },
+  practice: {
+    title: "修行资源",
+    en: "GO DO IT · PRACTICE",
+    sections: [
+      {
+        label: "进阶训练课程",
+        links: [
+          { name: "Stay Upright Advanced", url: "https://stayupright.com.au/courses/advanced/", note: "拿牌后第一年首选" },
+          { name: "HART Skills Course", url: "https://www.hartride.com.au/courses/", note: "Honda 旗下进阶" },
+          { name: "California Superbike School Aus", url: "https://www.superbikeschool.com.au/", note: "压弯专项" },
+        ],
+      },
+      {
+        label: "练车场地（墨尔本）",
+        links: [
+          { name: "Calder Park (训练场)", url: "https://www.calderpark.com.au/", note: "西区，有摩托训练日" },
+          { name: "Sandown Raceway", url: "https://www.sandown.net.au/", note: "Track Days · 进阶骑手" },
+          { name: "Phillip Island Circuit", url: "https://www.phillipislandcircuit.com.au/", note: "国家级赛道，开放日" },
+        ],
+      },
+      {
+        label: "社区 / 社群",
+        links: [
+          { name: "Netrider (澳洲最大摩托论坛)", url: "https://netrider.net.au/", note: "英文，但信息密度高" },
+          { name: "Whirlpool Motorcycles 板块", url: "https://forums.whirlpool.net.au/forum/97", note: "澳洲本地讨论" },
+          { name: "FortNine YouTube", url: "https://www.youtube.com/@FortNine", note: "技术 + 评测顶流" },
+          { name: "DanDanTheFireman", url: "https://www.youtube.com/@DanDanTheFireman", note: "通勤骑手向" },
+        ],
+      },
+      {
+        label: "事故处理（VIC）",
+        links: [
+          { name: "Victoria Police Online Reporting", url: "https://www.police.vic.gov.au/online-reporting", note: "事后补报警 / 拿到 event number" },
+          { name: "TAC 索赔流程", url: "https://www.tac.vic.gov.au/what-to-do-after-an-accident", note: "无过错保险，注册费里就含" },
+          { name: "TAC 在线报案", url: "https://www.tac.vic.gov.au/clients/lodging-a-claim", note: "12 个月时限，越早越好" },
+          { name: "What3Words", url: "https://what3words.com/", note: "山区精准定位给救护车（VIC 急救认这个）" },
+        ],
+      },
+    ],
+  },
+  mountain: {
+    title: "入山资源",
+    en: "GO DO IT · MOUNTAINS",
+    sections: [
+      {
+        label: "路线 + 导航",
+        links: [
+          { name: "Strava (查路书)", url: "https://www.strava.com/segments/explore?keyword=Black+Spur", note: "搜路段名查别人轨迹" },
+          { name: "Google Maps 导航", url: "https://www.google.com/maps/dir/Healesville+VIC/Marysville+VIC/", note: "Black Spur 例:Healesville→Marysville" },
+          { name: "Best Biking Roads", url: "https://www.bestbikingroads.com/motorcycle-roads/australia/victoria/", note: "维州摩托路线社区评分" },
+        ],
+      },
+      {
+        label: "天气 + 风险",
+        links: [
+          { name: "VicEmergency (火险预警)", url: "https://emergency.vic.gov.au/", note: "夏天必查，山火预警" },
+          { name: "BOM 7 天天气", url: "https://www.bom.gov.au/vic/forecasts/melbourne.shtml", note: "墨尔本气象局" },
+          { name: "VicRoads 道路状况", url: "https://traffic.vicroads.vic.gov.au/", note: "实时封路 / 事故" },
+        ],
+      },
+      {
+        label: "工具",
+        links: [
+          { name: "Snitch (限速摄像头 app)", url: "https://www.snitchapp.com.au/", note: "全澳警察蹲点位置" },
+          { name: "FuelCheck VIC", url: "https://www.vic.gov.au/fuelcheckvic", note: "维州官方油价查询" },
+        ],
+      },
+    ],
+  },
+  insurance: {
+    title: "护身资源",
+    en: "GO DO IT · INSURANCE",
+    sections: [
+      {
+        label: "保险比价（必比 3-5 家）",
+        links: [
+          { name: "QBE Motorcycle", url: "https://www.qbe.com/au/motorcycle-insurance", note: "新手友好，inexperienced rider excess 透明" },
+          { name: "NRMA Insurance", url: "https://www.nrma.com.au/motorcycle-insurance", note: "全国大型，3M+ 客户" },
+          { name: "RACV Insurance", url: "https://www.racv.com.au/insurance/motor/motorcycle.html", note: "VIC 本地，老品牌" },
+          { name: "Insure My Ride", url: "https://www.insuremyride.com.au/", note: "摩托专属保险公司" },
+          { name: "Youi", url: "https://www.youi.com.au/motorcycle-insurance", note: "评测好，含骑行装备 cover" },
+        ],
+      },
+      {
+        label: "TAC（VIC 无过错保险）",
+        links: [
+          { name: "TAC 官网", url: "https://www.tac.vic.gov.au/", note: "VIC 注册自带，事故索赔从这里开始" },
+          { name: "TAC 索赔流程", url: "https://www.tac.vic.gov.au/what-to-do-after-an-accident", note: "12 个月时限" },
+          { name: "Greenslip 解释", url: "https://www.tac.vic.gov.au/about-the-tac/our-organisation/about-the-tac/our-history", note: "VIC 的 CTP 叫 TAC charge，含在 reg 里" },
+        ],
+      },
+      {
+        label: "防盗装备",
+        links: [
+          { name: "Abus Granit Detecto", url: "https://www.amxsuperstores.com.au/", note: "AMX 售：碟刹锁带警报，A$150-200" },
+          { name: "Kryptonite New York Chain", url: "https://www.bikebiz.com.au/", note: "Bikebiz 售：18mm 链条锁，A$200-250" },
+          { name: "Datatool 警报器", url: "https://www.peterstevens.com.au/", note: "Peter Stevens 安装，A$300-500" },
+          { name: "AirTag 隐藏", url: "https://www.apple.com/au/shop/buy-airtag", note: "塞进座下电瓶舱——A$45 兜底" },
+        ],
+      },
+      {
+        label: "比价工具 + 论坛经验",
+        links: [
+          { name: "Finder 摩托保险比价", url: "https://www.finder.com.au/car-insurance/motorcycle-insurance", note: "不直接卖，给整体行情" },
+          { name: "Whirlpool 保险讨论", url: "https://forums.whirlpool.net.au/forum/97", note: "真实骑手报价分享" },
+          { name: "Netrider Insurance", url: "https://netrider.net.au/forums/insurance/", note: "澳洲摩托圈最大讨论区" },
+        ],
+      },
+    ],
+  },
+};
+
+export const chapterCompare = {
+  licence: {
+    title: "中国 ↔ 墨尔本 · 拿牌差异",
+    en: "CN ↔ MEL · LICENCE",
+    rows: [
+      { item: "驾照分类", cn: "E（≥250cc）/ F（≤250cc）/ D（轻便）", au: "L 牌 → P 牌（红/绿）→ Full" },
+      { item: "拿牌时长", cn: "场地考一次过 · 2-4 周", au: "L 牌持有 ≥3 个月 + Day 2 评估" },
+      { item: "笔试语言", cn: "中文", au: "L 牌阶段 VicRoads 提供中文版 Handbook" },
+      { item: "路考形式", cn: "场地桩考", au: "Day 2：真实道路骑行 + 自带车" },
+      { item: "总成本", cn: "RMB 2000-4000", au: "A$870-1370（驾校 + VicRoads 牌照费）" },
+      { item: "海外持照", cn: "—", au: "持有效摩托驾照 ≥3 年 → 直接 Full、免 LAMS" },
+    ],
+    note: "中国 D/E 摩托驾照在澳洲 (VIC) 已经不能直接换——2025.4.30 起 EDR 废止。但持照 ≥3 年仍可经过短考试拿 Full 牌，跳过 P 牌期。",
+  },
+  ride: {
+    title: "中国 ↔ 墨尔本 · 买车差异",
+    en: "CN ↔ MEL · BUY",
+    rows: [
+      { item: "二手平台", cn: "闲鱼 / 摩托车大全 / 哈罗摩托", au: "Bikesales / FB Marketplace / Gumtree" },
+      { item: "议价幅度", cn: "10-30% 砍价正常", au: "5-10% 温和议价（标价已含留议价空间）" },
+      { item: "验车", cn: "自己看 / 摩友帮看", au: "PPSR check（A$2 查欠款 + 偷车记录）必做" },
+      { item: "过户", cn: "车管所一次办", au: "卖家 + 买家各自填表 + 在线缴费（VicRoads）" },
+      { item: "上牌", cn: "4S 店代办", au: "新车经销商代办 / 二手车自己 VicRoads 上" },
+      { item: "国产 CFMoto", cn: "本土主流，售后遍地", au: "入澳 ~5 年，新手友好但售后网点少" },
+    ],
+    note: "在墨尔本买二手车，PPSR check 一定要做。RMB 10 都不到，但能查出车有没有欠款（被银行抵押）或被报失（偷车）——欠款车被买后银行可以把车拖走。",
+  },
+  gear: {
+    title: "中国 ↔ 墨尔本 · 装备差异",
+    en: "CN ↔ MEL · GEAR",
+    rows: [
+      { item: "头盔认证", cn: "国家 3C / GB 24429", au: "AS/NZS 1698 或 ECE 22.05 / 22.06" },
+      { item: "国产头盔", cn: "正规渠道合法", au: "戴上路违法 · 罚 ~A$300 + 扣 3 分" },
+      { item: "国际版 Shoei/Arai", cn: "淘宝可买（带 ECE）", au: "合法 · 海运可行" },
+      { item: "顶级品牌价格", cn: "Shoei X-15 ¥7-9k", au: "Shoei X-15 A$1500-2000（贵 ~50%）" },
+      { item: "国产护具", cn: "赛羽 / 杜汉 / MOTOBOY 主流", au: "无澳洲渠道 · 必海运" },
+      { item: "本地店买", cn: "—", au: "AMX / Peter Stevens / MCAS（可现场试戴）" },
+    ],
+    note: "头盔不要图便宜买淘宝普通款戴上路——警察一查无 AS/NZS 1698 或 ECE 标志直接罚。要买淘宝就买「国际版」「出口版」——这些带 ECE 22.05 标志，合法。",
+  },
+  practice: {
+    title: "中国 ↔ 墨尔本 · 练车与团骑差异",
+    en: "CN ↔ MEL · PRACTICE",
+    rows: [
+      { item: "团骑组织", cn: "微信群 / 摩友会", au: "FB Group / Meetup / Netrider 论坛" },
+      { item: "团骑距离", cn: "跟车较紧 / 加油站集合", au: "山路保持 3 秒间隔 / 直路 2 秒" },
+      { item: "Lane filter", cn: "随意穿插", au: "≤30 km/h 合法 · 校区/学校/重型车旁禁止" },
+      { item: "路上挥手", cn: "少见", au: "对面摩托见到要左手 V 字回礼（社交礼仪）" },
+      { item: "进阶训练", cn: "私教零散", au: "Stay Upright Advanced / Track Day 体系完整" },
+      { item: "Track Day", cn: "罕见 / 自办", au: "Phillip Island / Sandown 每月开放" },
+    ],
+    note: "墨尔本骑手挥手文化是真的——长途路上对面摩托过来不挥手会被觉得没礼貌。手势：左手低位伸出，V 字（食指 + 中指）。",
+  },
+  mountain: {
+    title: "中国 ↔ 墨尔本 · 跑山差异",
+    en: "CN ↔ MEL · MOUNTAINS",
+    rows: [
+      { item: "限速 / 测速", cn: "山路常 60-80 / Camera 少", au: "山路 100 km/h 但 Camera 密集（必装 Snitch）" },
+      { item: "路面风险", cn: "落石 / 修路 / 货车", au: "袋鼠（清晨黄昏高发）/ 苔藓 / 周末拥堵" },
+      { item: "加油", cn: "沿途加油站多", au: "山区加油站稀少 · 必算续航（出门加满）" },
+      { item: "紧急号", cn: "110 / 120", au: "000（VIC 通用）+ What3Words app（精准定位给救护）" },
+      { item: "夏季风险", cn: "暴雨", au: "山火预警 + 极端高温（必查 VicEmergency）" },
+      { item: "冬季风险", cn: "冰雪", au: "山区结冰（Mt Donna Buang/Lake Mountain 最重）" },
+    ],
+    note: "袋鼠是墨尔本山路最危险的事——清晨日出前 1h、黄昏日落后 1h 是它们出来的高峰，撞上去 100% 摔车。这两个时段尽量不进山。",
+  },
+  insurance: {
+    title: "中国 ↔ 墨尔本 · 保险差异",
+    en: "CN ↔ MEL · INSURANCE",
+    rows: [
+      { item: "强制险", cn: "交强险（人保 / 平安）单独购买", au: "VIC 已含在 reg fee（TAC 无过错保险）" },
+      { item: "无过错原则", cn: "事故定责后赔偿", au: "TAC：不论谁错，受伤人都能索赔医疗" },
+      { item: "驾龄计算", cn: "汽车驾龄 + 摩托驾龄合并", au: "只算摩托驾龄——汽车老司机也算「新手」" },
+      { item: "新手溢价", cn: "约 + 10-30%", au: "持照 < 3 年 → 1.5-3 倍溢价 + 高 excess" },
+      { item: "选公司方式", cn: "几大国有 + 三方比价", au: "5+ 家比价（QBE / NRMA / RACV / Insure My Ride / Youi）" },
+      { item: "停车防盗", cn: "小区固定停车", au: "墨尔本盗车率高 · Disc lock + chain lock 双重" },
+    ],
+    note: "中国 D/E 驾照转换者最容易踩的坑：保险公司只看你 VIC 摩托驾龄，不认你国内汽车驾龄。所以即使你 30 岁开了 10 年车，第一年保险费还是按「新手」算。",
+  },
+};
+
+export const taobaoShippingData = {
+  green: {
+    label: "可海运 · 戴上路合法",
+    color: "#4a8b4f",
+    items: [
+      { name: "国际版 / 出口版头盔", note: "淘宝搜「Shoei 国际版」「Arai 出口版」「AGV ECE」——带 ECE 22.05 标志，合法上路" },
+      { name: "手套（夏季 / 冬季 / 雨季）", note: "赛羽 / KOMINE 国内版 / 杜汉，性价比远超本地" },
+      { name: "护具马甲 / 护膝 / 护肘", note: "MOTOBOY 拉力服 / 赛羽护具，护甲价格仅本地 1/3" },
+      { name: "雨衣 / 反光背心", note: "完全无认证要求" },
+      { name: "骑行包 / 油箱包 / 尾包", note: "无认证要求" },
+      { name: "通讯耳机（Cardo / Sena 中国版）", note: "国内代理货约 RMB 1500，澳洲价 A$500+" },
+    ],
+  },
+  yellow: {
+    label: "可海运 · 但⚠️戴上路违法",
+    color: "#c9a233",
+    items: [
+      { name: "国内 3C 认证头盔（GB 24429）", note: "淘宝大多数普通头盔——只有中国 3C 标志。澳洲警察查到罚 A$300 + 扣 3 分" },
+      { name: "仿货 / 山寨皮衣", note: "假 CE 认证标志 = 出事故时护具失效" },
+      { name: "改装件：消音器 / 排气", note: "海运没问题，装上去过 RWC（Roadworthy Certificate）困难" },
+    ],
+  },
+  red: {
+    label: "禁运 · 海关会扣",
+    color: "#c73e1d",
+    items: [
+      { name: "锂电池类", note: "加热手套 / 加热背心 / 通讯耳机单独邮寄电池——空运严禁，海运需特殊申报" },
+      { name: "燃料 / 化学品", note: "防爆罐 / 燃油添加剂 / 链条清洁剂（部分含 carb cleaner）" },
+      { name: "气溶胶罐（aerosol）", note: "轮胎补气罐 / 防锈喷雾——快递公司一律拒收" },
+      { name: "未授权改装电子件", note: "射灯 / 喇叭等可能涉及电磁兼容（EMC）认证问题" },
+    ],
+  },
+};
+
+export const shippingChannels = [
+  { name: "淘宝官方集运 · 空运", time: "10-20 天", price: "¥63/kg 起", best: "急件 / 小件 / 头盔单发" },
+  { name: "淘宝官方集运 · 海运", time: "40-45 天", price: "¥66/kg 起", best: "大件 / 整套装备 / 不急" },
+  { name: "第三方转运（中环 / 4PX / 燕文）", time: "5-15 天", price: "比官方便宜 ~28%", best: "多店多件合并发运" },
+  { name: "回国探亲带回", time: "当天", price: "免（行李额内）", best: "头盔 / 大件 / 怕摔的精密装备" },
+];
+
+export const insuranceLayers = [
+  {
+    num: "01",
+    type: "CTP / TAC",
+    en: "Compulsory Third Party",
+    cn: "强制第三方人身险",
+    cost: "A$0（已含 reg）",
+    cover: "事故造成他人受伤时的医疗赔偿",
+    detail: "VIC 已含在车辆注册费里——交了 reg 就有。这是法律最低线。",
+    enough: false,
+  },
+  {
+    num: "02",
+    type: "Third Party Property",
+    en: "TPP",
+    cn: "第三方财产险",
+    cost: "A$200-500/年",
+    cover: "你撞了别人的车 / 财产 → 赔他",
+    detail: "你撞了一辆 Tesla 你赔不起的——这险就是为这个买的。",
+    enough: false,
+  },
+  {
+    num: "03",
+    type: "Comprehensive",
+    en: "全险",
+    cn: "综合险",
+    cost: "A$500-3,800/年",
+    cover: "撞别人 + 自己的车 + 偷车 + 火灾 + 泼撒",
+    detail: "新车 / 贷款车 / 价值 > A$8k 的车 → 必须买综合险。",
+    enough: true,
+  },
+];
+
+export const insuranceCompanies = [
+  { name: "QBE", url: "https://www.qbe.com/au/motorcycle-insurance", focus: "新手友好", priceNew: "A$700-1.5k", priceExp: "A$400-700", note: "Inexperienced rider excess 透明，行业标杆" },
+  { name: "NRMA", url: "https://www.nrma.com.au/motorcycle-insurance", focus: "全国大型", priceNew: "A$650-1.2k", priceExp: "A$320-600", note: "3M+ 客户，理赔体验稳定" },
+  { name: "RACV", url: "https://www.racv.com.au/insurance/motor/motorcycle.html", focus: "VIC 本地", priceNew: "A$700-1.4k", priceExp: "A$380-680", note: "墨尔本骑手首选，与 Swann 同承保" },
+  { name: "Insure My Ride", url: "https://www.insuremyride.com.au/", focus: "摩托专属", priceNew: "A$800-3.8k", priceExp: "A$400-900", note: "摩托特化，但新手报价偏高" },
+  { name: "Youi", url: "https://www.youi.com.au/motorcycle-insurance", focus: "装备覆盖好", priceNew: "A$750-1.5k", priceExp: "A$420-800", note: "含骑行装备险 + 24h 道路救援" },
+];
+
+export const newRiderRules = [
+  { factor: "持照年限", impact: "< 3 年高溢价", detail: "保险公司只看你 VIC 摩托驾龄。即使你国内开车 10 年——这里也是新手。" },
+  { factor: "年龄", impact: "< 25 岁 + 50%", detail: "25 岁是分水岭。30 岁 + 持照 3 年是性价比最高的组合。" },
+  { factor: "车辆价值", impact: "决定要不要综合险", detail: "二手 < A$5k 的车买第三方财产就够。新车 / > A$8k 必须综合。" },
+  { factor: "停车位置", impact: "锁车库省 10-20%", detail: "申报为「locked garage」比「driveway」便宜。但保险公司可能验证。" },
+  { factor: "Rider Training", impact: "完成驾校认证 -5%", detail: "Stay Upright / HART 完成认证课程可享 Rider Training Course Discount。" },
+  { factor: "改装", impact: "未申报 = 全部失效", detail: "排气、ECU、踏板——任何改装必须告诉保险公司，否则索赔被拒。" },
+];
+
+export const theftSpots = [
+  { suburb: "CBD / Southbank / Docklands", level: "极高", reason: "公共停车 + 流动人口多 + 监控覆盖低" },
+  { suburb: "Footscray / Sunshine / Dandenong", level: "高", reason: "工业区周边，作案后好脱手" },
+  { suburb: "Brunswick / Fitzroy / Collingwood", level: "中高", reason: "夜生活区，凌晨高发" },
+  { suburb: "South Yarra / Toorak", level: "中", reason: "目标车辆贵，作案有针对性" },
+  { suburb: "Box Hill / Glen Waverley", level: "低", reason: "华人聚居，监控密度高" },
+];
+
+export const lockKit = [
+  { item: "Disc Lock + 警报", price: "A$150-200", brand: "Abus Granit Detecto / Xena", role: "前轮锁碟，挪动触发警报" },
+  { item: "Chain Lock 18mm+", price: "A$200-300", brand: "Kryptonite New York / Almax Series III", role: "锁后轮到固定物（路桩 / 车架）" },
+  { item: "Cover 车罩", price: "A$50-100", brand: "Oxford Aquatex / Nelson-Rigg", role: "「不显眼」是最强防盗——窃贼挑显眼的下手" },
+  { item: "Tracker / AirTag", price: "A$45-300", brand: "AirTag / Datatool S4", role: "丢了能找回。AirTag 必须藏车上隐蔽位置" },
+];

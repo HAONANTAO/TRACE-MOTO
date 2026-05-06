@@ -2,20 +2,171 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0A0A0C" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
-    <title>骑迹行者 · WAYFARER · 墨尔本华人摩托新手指南</title>
-    <meta name="description" content="墨尔本华人骑士的 0→1 完整指南：VIC 驾照流程、海外驾照转换、LAMS 选车、装备、跑山。" />
+    <!-- ============== 搜索引擎验证（部署后到对应控制台拿 token 替换 REPLACE_ME） ============== -->
+    <!-- Google Search Console: https://search.google.com/search-console -->
+    <meta name="google-site-verification" content="REPLACE_ME_GOOGLE" />
+    <!-- Bing Webmaster: https://www.bing.com/webmasters -->
+    <meta name="msvalidate.01" content="REPLACE_ME_BING" />
+    <!-- 百度站长（可选 · 国内访客多再做）: https://ziyuan.baidu.com -->
+    <meta name="baidu-site-verification" content="REPLACE_ME_BAIDU" />
 
-    <meta property="og:type" content="website" />
+    <!-- ============== SEO 基础 ============== -->
+    <!-- 部署到自己域名后，把下面的 https://wayfarer-phi.vercel.app 全部替换成你的真实域名 -->
+    <title>骑迹行者 · 墨尔本华人摩托新手指南 | VIC 拿牌 · LAMS 选车 · 跑山攻略</title>
+    <meta name="description" content="墨尔本华人骑士的 0→1 完整指南：VIC 驾照流程 + 中国驾照转换 + LAMS 选车（11 台精选 + 43 台目录） + 装备策略（本地 vs 淘宝） + Black Spur 跑山路书 + 保险防盗。" />
+    <meta name="keywords" content="墨尔本摩托,LAMS,VicRoads,海外驾照转换,中国驾照转 VIC,墨尔本华人骑士,Black Spur,Ninja 400,MT-03,CB300R,摩托保险,骑行装备" />
+    <meta name="author" content="骑迹行者编辑部" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://wayfarer-phi.vercel.app/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://wayfarer-phi.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://wayfarer-phi.vercel.app/" />
+
+    <!-- ============== 分享卡片（微信 / 朋友圈 / 小红书 / Telegram / iMessage） ============== -->
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="骑迹行者 · WAYFARER" />
     <meta property="og:title" content="骑迹行者 · 墨尔本华人摩托新手指南" />
-    <meta property="og:description" content="从拿牌到第一次跑山的全流程。" />
-    <!-- 把 1200×630 的封面图放到 public/og.png 后，下一行就会生效 -->
-    <meta property="og:image" content="/og.png" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:description" content="从拿牌到第一次跑山的全流程。VIC 驾照 · LAMS 选车 · 装备 · 保险 · 跑山。" />
+    <meta property="og:url" content="https://wayfarer-phi.vercel.app/" />
+    <meta property="og:image" content="https://wayfarer-phi.vercel.app/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="骑迹行者 · ZERO TO MOUNTAIN · 墨尔本华人摩托新手指南" />
 
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="骑迹行者 · 墨尔本华人摩托新手指南" />
+    <meta name="twitter:description" content="从拿牌到第一次跑山的全流程。" />
+    <meta name="twitter:image" content="https://wayfarer-phi.vercel.app/og.png" />
+
+    <!-- ============== 结构化数据（Google 富搜索结果） ============== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "骑迹行者 · 墨尔本华人摩托新手指南",
+      "alternativeHeadline": "Wayfarer · A Chinese-language motorcycling guide for Melbourne newcomers",
+      "description": "墨尔本华人骑士的 0→1 完整指南：VIC 驾照流程、海外驾照转换、LAMS 选车、装备、跑山、保险。",
+      "image": "https://wayfarer-phi.vercel.app/og.png",
+      "url": "https://wayfarer-phi.vercel.app/",
+      "inLanguage": "zh-CN",
+      "datePublished": "2026-04-20",
+      "dateModified": "2026-05-06",
+      "author": {
+        "@type": "Organization",
+        "name": "骑迹行者编辑部",
+        "url": "https://wayfarer-phi.vercel.app/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "骑迹行者 · WAYFARER",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://wayfarer-phi.vercel.app/favicon.svg"
+        }
+      },
+      "articleSection": [
+        "01 拿牌 · LICENCE",
+        "02 选车 · RIDE",
+        "03 装备 · GEAR",
+        "04 修行 · PRACTICE",
+        "05 入山 · MOUNTAIN",
+        "06 护身 · INSURANCE"
+      ],
+      "about": [
+        { "@type": "Thing", "name": "VicRoads 摩托驾照流程" },
+        { "@type": "Thing", "name": "中国驾照转换 VIC" },
+        { "@type": "Thing", "name": "LAMS 摩托车选购" },
+        { "@type": "Thing", "name": "摩托骑行装备" },
+        { "@type": "Thing", "name": "Black Spur 跑山" },
+        { "@type": "Thing", "name": "澳洲摩托保险" }
+      ],
+      "spatialCoverage": {
+        "@type": "Place",
+        "name": "Melbourne, Victoria, Australia"
+      }
+    }
+    </script>
+
+    <!-- ============== FAQ 结构化数据（Google 搜索结果可显示成可展开问答卡） ============== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "中国驾照在墨尔本能直接骑摩托吗？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "中国 D/E 摩托驾照不能直接在 VIC 上路。你需要去 VicRoads 做海外驾照转换：先 NAATI 翻译，再到 VicRoads 做眼测 + 知识测试。持照 ≥ 3 年的可以直接拿 Full Licence（无 LAMS 限制），< 3 年要先持 P 牌满 3 年才能解禁。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "什么是 LAMS？新手只能骑哪些摩托？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "LAMS = Learner Approved Motorcycle Scheme，是 VIC 给新手骑士的限制：排量 ≤ 660cc 且功率/重量比 < 150kW/吨。新手 P 牌期间只能骑 LAMS 列表上的车。本指南列了 11 台精选 + 43 台完整目录，最热门的有 Ninja 400、MT-03、CB300R、Z650 LAMS、SV650 LAMS 等。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "168cm 身高选 MT-03 还是 Ninja 400？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "MT-03 座椅 780mm 比 Ninja 400 的 785mm 略低，且街车姿势更直立——脚触地更友好。Ninja 400 是仿赛姿势前倾，对矮个不友好。168cm 推荐 MT-03、CB300R（800mm 但车窄）、CMX300 Rebel（690mm 巡航）、Meteor 350（765mm）。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "墨尔本第一次跑山去哪条路？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "新手第一次跑山推荐 Kinglake Loop（60km，距墨尔本 CBD 约 50km，难度低，路况好）。Black Spur（32km，墨尔本最经典 sweepers）适合骑车 4-6 个月后再去——它是维州官方记录的摩托事故黑点，没路肩、连续 hairpin、湿天危险。建议周日早 8 点前到，避开游客车流。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "澳洲摩托头盔可以从淘宝买吗？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不建议。澳洲法律强制 AS/NZS 1698 认证，淘宝多数头盔只有 ECE 22.06 或中国 3C 认证，戴上路违法（罚款 A$300+ 扣 3 分）。第一顶头盔必须本地买。其他装备如手套、护具、骑行裤、雨衣可以淘宝海运——国产 SCOYCO 赛羽、PRO-BIKER、KOMINE 真品在国内便宜 30-50%。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "墨尔本摩托保险新手要多少钱一年？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "VIC 强制 CTP（TAC）已含在车辆 reg fee 里。第三方财产险（TPP）A$200-500/年。综合险（Comprehensive）新手 P 牌 A$700-3800/年，持照 ≥ 3 年降到 A$320-700。新手溢价是真实的：同一辆 Ninja 300 学员可能 A$3800/年，老司机 A$368/年。比价 3-5 家（QBE / NRMA / RACV / Insure My Ride / Youi）能差 40%。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "墨尔本摩托被偷率高吗？怎么防盗？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "墨尔本是澳洲摩托盗窃率第二高的城市。CBD / Footscray / Sunshine 是高发区。防盗四件套约 A$450-900：Disc Lock + 警报（A$150-200）、Chain Lock 18mm+（A$200-300）、Cover 车罩（A$50-100）、AirTag/Tracker（A$45-300）。AirTag 必须藏到外人摸不到的位置。"
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- ============== 网站统计（Plausible · 1KB · 不用 cookie banner） ============== -->
+    <!-- 部署后到 https://plausible.io 注册账号 → 把 data-domain 改成你的真实域名即可启用。 -->
+    <!-- 想用 GA4 改成: <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXX"></script>... -->
+    <script defer data-domain="wayfarer-phi.vercel.app" src="https://plausible.io/js/script.js"></script>
+
+    <!-- ============== 字体（preconnect + 异步加载） ============== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,6 +181,14 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 40px; color: #ECE6D9; background: #0A0A0C; font-family: -apple-system, 'PingFang SC', sans-serif; line-height: 1.7;">
+        <h1 style="font-size: 32px; margin: 0 0 16px;">骑迹行者 · 墨尔本华人摩托新手指南</h1>
+        <p>本站需要 JavaScript 才能完整呈现。如果你看到这条信息，说明浏览器禁用了 JS。</p>
+        <p style="color: #C73E1D">六章内容：01 拿牌 · 02 选车 · 03 装备 · 04 修行 · 05 入山 · 06 护身</p>
+        <p>从 VIC 驾照流程、海外驾照转换、LAMS 选车（11 台精选 + 43 台目录），到 Black Spur 跑山路书与本地保险防盗——为墨尔本华人骑士写的 0→1 完整指南。</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

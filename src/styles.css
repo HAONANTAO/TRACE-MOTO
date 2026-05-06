@@ -1,5 +1,6 @@
 :root {
   --bg: #0A0A0C;
+  --bg-alt: #0D0D11;
   --surface: #111116;
   --surface-2: #16161D;
   --cream: #ECE6D9;
@@ -49,6 +50,11 @@ body { background: var(--bg); }
 @keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 .backdrop-in { animation: backdrop-in 0.3s ease-out; }
 
+@keyframes rail-in {
+  from { opacity: 0; transform: translate(8px, -50%); }
+  to { opacity: 1; transform: translate(0, -50%); }
+}
+
 ::selection { background: var(--accent); color: var(--cream); }
 
 .grain::before {
@@ -61,6 +67,100 @@ body { background: var(--bg); }
 .nav-link:hover { color: var(--accent) !important; }
 .funnel-card:hover { border-color: var(--accent) !important; transform: translateY(-2px); }
 .funnel-card { transition: all 0.2s ease; }
+
+/* === Sections (visual rhythm) ===========================================
+   每个章节略微换底色，打破纯黑通铺。增加章节间的呼吸距离。 */
+section[id="ride"],
+section[id="practice"],
+section[id="mountain"] {
+  background: var(--bg-alt);
+}
+section[id="licence"],
+section[id="ride"],
+section[id="gear"],
+section[id="practice"],
+section[id="mountain"],
+section[id="insurance"] {
+  scroll-margin-top: 80px; /* 顶部 nav 高度，避免锚点滚到被遮 */
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+/* === Top progress bar (随页面滚动填充) === */
+.top-progress {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+  height: 2px; background: transparent; pointer-events: none;
+}
+.top-progress > i {
+  display: block; height: 100%; background: var(--accent);
+  width: 0; transition: width 0.05s linear;
+}
+
+/* === Side rail (右侧悬浮章节导航) === */
+.side-rail {
+  position: fixed; right: 20px; top: 50%; z-index: 40;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 6px;
+  animation: rail-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.5s;
+}
+.rail-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 10, 12, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  color: var(--cream-mute);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; letter-spacing: 0;
+  cursor: pointer; transition: all 0.18s ease;
+  user-select: none;
+}
+.rail-btn:hover { color: var(--accent); border-color: var(--accent); }
+.rail-list {
+  list-style: none; display: flex; flex-direction: column; gap: 4px;
+  padding: 6px; margin: 0;
+  background: rgba(10, 10, 12, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+}
+.rail-dot {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px;
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; font-weight: 700;
+  color: var(--cream-mute);
+  border-left: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+.rail-dot .rail-num { width: 18px; }
+.rail-dot .rail-cn {
+  max-width: 0; opacity: 0; overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.25s ease, opacity 0.15s ease;
+}
+.rail-dot:hover .rail-cn { max-width: 80px; opacity: 1; }
+.rail-dot:hover { color: var(--cream); }
+.rail-dot.on {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(199, 62, 29, 0.08);
+}
+.rail-dot.on .rail-cn { max-width: 80px; opacity: 1; }
+
+@media (max-width: 900px) {
+  .side-rail { display: none; }
+}
+.show-mobile-rail {
+  display: none;
+  position: fixed; right: 16px; bottom: 16px; z-index: 40;
+}
+@media (max-width: 900px) {
+  .show-mobile-rail { display: flex; flex-direction: column; gap: 6px; }
+}
 
 .container { padding-left: clamp(20px, 4vw, 64px); padding-right: clamp(20px, 4vw, 64px); }
 .hide-mobile { display: block; }
@@ -87,11 +187,61 @@ body { background: var(--bg); }
 .resource-link-note { font-size: 12px; }
 .resource-link-go { font-size: 11px; }
 
+/* === Bike compare (车型并排对比) === */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 130px repeat(var(--cmp-cols, 3), 1fr);
+  gap: 0;
+}
+.compare-grid > div {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.compare-grid > .cmp-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; font-weight: 700;
+  color: var(--mute);
+  border-right: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.compare-grid > .cmp-cell.best {
+  background: rgba(199, 62, 29, 0.06);
+  color: var(--cream);
+  font-weight: 700;
+}
+.cmp-pick {
+  display: grid;
+  grid-template-columns: 130px repeat(var(--cmp-cols, 3), 1fr);
+  gap: 0;
+  margin-bottom: 0;
+}
+.cmp-pick .cmp-label { padding: 14px 16px; border-bottom: 1px solid var(--border-strong); }
+.cmp-pick > select {
+  padding: 14px 16px;
+  background: var(--surface);
+  border: none;
+  border-bottom: 1px solid var(--border-strong);
+  border-left: 1px solid var(--border);
+  color: var(--cream);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 1px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239B978D' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.cmp-pick > select:focus { outline: 1px solid var(--accent); }
+
 @media (max-width: 1024px) {
   .grid-5 { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .chapter-grid { grid-template-columns: 1fr; gap: 24px; }
   .outro-grid { grid-template-columns: 1fr; gap: 32px; }
+  .compare-grid, .cmp-pick { grid-template-columns: 110px repeat(var(--cmp-cols, 3), 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -109,6 +259,10 @@ body { background: var(--bg); }
   .nav-spacer { gap: 12px !important; }
   .ai-drawer { width: 100% !important; }
   table { min-width: 640px; }
+
+  .compare-grid, .cmp-pick { grid-template-columns: 90px repeat(var(--cmp-cols, 3), 1fr); }
+  .compare-grid > div { padding: 10px 8px; font-size: 12px; }
+  .compare-grid > .cmp-label { font-size: 9px; padding: 10px 8px; }
 
   .resource-link-row {
     grid-template-columns: 1fr auto;

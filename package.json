@@ -5,8 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && node scripts/prerender.mjs",
+    "build:vercel": "vite build",
+    "build:fast": "vite build",
+    "preview": "vite preview",
+    "prerender": "node scripts/prerender.mjs",
+    "og": "node scripts/build-og.mjs",
+    "icons": "node scripts/build-icons.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.383.0",
@@ -15,6 +20,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "puppeteer": "^24.43.0",
+    "sharp": "^0.34.5",
     "vite": "^5.4.2"
   }
 }
